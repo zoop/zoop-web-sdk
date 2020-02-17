@@ -124,7 +124,7 @@ You can download or add the link to the CDN of our Web SDK. There are two functi
 <a name="bsaWebhook"></a>
 ### 5. WEBHOOK
 
-The webhook response will be received to the webhook_url provided in the initialization call. When receiving the webhook response please match the webhook_security_key in the header of the request to be the same as the one provided in the init call. **If they are not the same you must abandon the webhook response**.
+The webhook response will be sent to `webhook_url` provided at the init call. You might receive multiple responses for a single transaction. The response(s) will be send when the user start any kind of interaction with the gateway. When receiving the webhook response please match the webhook_security_key in the header of the request to be the same as the one provided in the init call. If they are not the same **you must abandon the webhook response**.
 
 <a name="bsaSuccessWebhookReqBody"></a>
 #### 5.1 SUCCESSFUL REQUEST BODY
