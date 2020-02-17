@@ -226,7 +226,7 @@ After creating an initialization request successfully you can check at which sta
 {
     "id": "<<transaction_id>>",
     "mode": "REDIRECT",
-    "env": "PREPROD",
+    "env": "PRODUCTION",
     "request_version": "1.0",
     "bank": "SBI",
     "last_user_stage": "login_opened",
