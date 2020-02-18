@@ -46,35 +46,34 @@ To initiate a gateway transaction a REST API call has to be made to backend. Thi
 # Table of Contents
 
 ## AadhaarAPI E-Sign Gateway.
-1. [INTRODUCTION](#esignIntroduction)
-2. [PROCESS FLOW](#esignProcessFlow)
-3. [END USER FLOW](#esignEndUserFlow)
-3. [INITIATING A GATEWAY TRANSACTION FOR E-SIGN](#esignInit)
-   - [INIT URL](#esignInitUrl)
-   - [REQUEST HEADERS](#esignRequestHeaders)
-   - [REQUEST BODY PARAMS](#esignRequestbody)
-   - [RESPONSE PARAMS](#esignResponseParams)
-4. [ADDING SDK (.AAR FILE) TO YOUR PROJECT](#esignAddSDK)
-5. [CONFIGURING AND LAUNCHING THE E-SIGN SDK](#esignConfigureSDK)
-   - [IMPORT FILES](#esignImportFiles)
-   - [ADD STRINGS(IN STRINGS.XML FILE)](#esignAddString)
-   - [CALL E-SIGN SDK FROM THE ACTIVITY](#esignCallSDK)
-   - [HANDLE SDK RESPONSE](#esignHandleSDK)
-6. [RESPONSE FORMAT SENT ON MOBILE](#esignRespMobile)
-   - [SUCCESS JSON RESPONSE FORMAT FOR E-SIGN SUCCESS](#esignSuccessRespMob)
-   - [ERROR JSON RESPONSE FORMAT FOR E_SIGN ERROR](#esignErrorRespMob)
-   - [ERROR JSON RESPONSE FORMAT FOR GATEWAY ERROR](#esignErrorRespGateway)
-7. [RESPONSE FORMAT SENT ON RESPONSE_URL(ADDED IN INIT API CALL)](#esignRespInit)
-   - [SUCCESS JSON RESPONSE FORMAT FOR E-SIGN SUCCESS](#esignRespInitSuccess)
-   - [ERROR JSON RESPONSE FORMAT FOR E_SIGN ERROR](#esignRespInitError)
-8. [BIOMETRIC DEVICES SETUP](#esignBiometric)
-9. [PULLING TRANSACTION STATUS AT BACKEND](#esignStatus)
-   - [RESPONSE PARAMS](#esignStatusResp)
+1. [Introduction](#esignIntroduction)
+2. [Process Flow](#esignProcessFlow)
+3. [End User Flow](#esignEndUserFlow)
+4. [Initiating a Gateway Transaction For E-Sign](#esignInit)
+   - [Init URL](#esignInitUrl)
+   - [Request Headers](#esignRequestHeaders)
+   - [Request Body Params](#esignRequestbody)
+   - [Response Params](#esignResponseParams)
+5. [Set Zoop Environment](#setZoopEnv)
+6. [Adding Web SDK To Your Project](#esignAddSDK)
+   - [Setup the gateway UI to match your application](#esign-gateway-setup)
+7. [Handle Events](#esignEventTitle)
+   - [`payload`](#message-payload)
+     - [`esign-result`](#message-esign-result)
+     - [`otp-error`](#message-otp-error)
+     - [`gateway-error`](#message-gateway-error)
+8. [Response Format Sent On `responseURL` (Added In Init API Call)](#esignRespInit)
+   - [Success JSON Response Format For E-Sign Success](#esignRespInitSuccess)
+   - [Error JSON Response Format For E-Sign Error](#esignRespInitError)
+9. [Pulling Transaction Status At Backend](#esignStatus)
+   - [URL](#esignInitURL)
+   - [Response Params](#esignStatusResp)
+10. [Annexure](#annexure)
    
    ## AadhaarAPI E-Sign Gateway 
 
 <a name="esignIntroduction"></a>
-### 1. INTRODUCTION
+### 1. Introduction
 As a registered ASP under ESP AadhaarAPI provide WEB and Mobile gateway for E-signing of
 documents. Using these gateways any organisation on-boarded with us can get their documents
 signed digitally by their customer using Aadhaar number based EKYC (performed on ESP portal).
@@ -88,7 +87,7 @@ process. Aadhaar based E-sign is a valid and legal signature as per government r
 accepted widely across India by various organisations.
 
 <a name="esignProcessFlow"></a>
-### 2. PROCESS FLOW
+### 2. Process Flow
 1. Generate the document based on the user info at your backend.
 2. At your backend server, Initiate the e-sign transaction using a simple Rest API [POST] call by converting your
 document into base64 string or via our Multi-Part Upload API. Details of these are available in the documents
@@ -107,7 +106,7 @@ can be used by the client to process the flow further.
 failure. 
 
 <a name="esignEndUserFlow"></a>
-### 3 End User Flow:
+### 3. End User Flow:
 1. Customer Login [ E-mail + OTP | Gmail Login | Phone + OTP (beta) ]
 2. Document displayed to customer. (Draggable signature option can be turned on via gateway config or
 signPageNumber and coordinates can be fixed during initiation call)
@@ -124,13 +123,13 @@ are sent to the responseURL.
 programmatically fetch certificate from PDF to ensure validity of certificate if required.
 
 <a name="esignInit"></a>
-### 3. INITIATING A GATEWAY TRANSACTION FOR E-SIGN[IP WHITELISTED IN PRODUCTION] 
+### 4. Initiating a Gateway Transaction For E-Sign[IP Whitelisted In Production] 
 To initiate a gateway transaction a REST API call has to be made to backend. This call will
 generate a **Gateway Transaction Id** which needs to be passed to the frontend web-sdk to launch
 the gateway.
 
 <a name="esignInitUrl"></a>
-#### 3.1 INIT URL: 
+#### 4.1 Init URL: 
     URL: POST {{base_url}}/gateway/esign/init/
  **{{base_url}}**
  
@@ -371,7 +370,7 @@ In case you are facing any issues with integration please open a ticket on our [
  **Example Url:** https://preprod.aadhaarapi.com/gateway/esign/init/
  
 <a name="esignRequestHeaders"></a>
-#### 3.2 REQUEST HEADERS: [All Mandatory]
+#### 4.2 Request Headers: [All Mandatory]
   qt_api_key: <<your api key value – available via Dashboard>>
   
   qt_agency_id: <<your agency id value – available via Dashboard>>
@@ -379,7 +378,7 @@ In case you are facing any issues with integration please open a ticket on our [
   Content-Type: application/json
   
 <a name="esignRequestbody"></a>
-#### 3.3 REQUEST BODY PARAMS: [All Mandatory]
+#### 4.3 Request Body Params: [All Mandatory]
 ```json
 {
     "document": {
@@ -409,7 +408,7 @@ In case you are facing any issues with integration please open a ticket on our [
 | version | Current E-sign version (2.0) | Must be 2.0 |
 
 <a name="esignResponseParams"></a>
-#### 3.4 RESPONSE PARAMS:
+#### 4.4 Response Params:
 ```json
 {
   "id": "<<transactionId>>",
@@ -424,7 +423,8 @@ The above generated gateway transactionId has to be made available to frontend t
 
  **Note:**  A transaction is valid only for 30 mins after generation. 
 
-### 4. Set Zoop Environment
+<a name="setZoopEnv"></a>
+### 5. Set Zoop Environment
 
 First, you might have to specify the environment in which you want the SDK to run. By default, **staging** environment is picked if you forgot to specify any value. Valid environments are **production** and **staging**. To set the environment you call `setEnvironment` method from the provided SDK. This helps us to understand what type of transactions you are planning of doing.
 
@@ -433,7 +433,7 @@ zoop.setEnvironment('production'); // Use 'staging' for staging environment
 ```
 
 <a name="esignAddSDK"></a>
-### 4.ADDING WEB SDK TO YOUR PROJECT
+### 6. Adding Web SDK To Your Project
 You can download or add the link to the CDN of our Web SDK. There are two function calls to open the gateway. They should called in the order mentioned in the docs. Firstly, to initiate the gateway you have to call `zoop.eSignGatewayInit(gatewayOptions)` with the [gateway option](#esign-gateway-setup). The next step would be to open the gateway. That can be done by simply calling `zoop.eSignGateway(<<transaction_id>>)` with the transaction ID generated in the init call. For your ease we have also added one simple example below.
 
 ```html
@@ -464,7 +464,7 @@ You can download or add the link to the CDN of our Web SDK. There are two functi
 ```
 
 <a name="esign-gateway-setup"></a>
-#### 4.1 Setup the gateway UI to match your application.
+#### 6.1 Setup the gateway UI to match your application.
 ```js
 const gatewayOptions = {
     company_display_name: '<<Add your company name here>>', //(required)
@@ -481,8 +481,8 @@ const gatewayOptions = {
 ```
 
 
-<a name="esignConfigureSDK"></a>
-### 5. Handle With Events 
+<a name="esignEventTitle"></a>
+### 7. Handle Events 
 
 Events are the way to acknowledge consumer of the SDK that something has happened. Listening of the events is same for each event.
 
@@ -508,14 +508,17 @@ The `message` parameter is an object which has `action`, `payload`, and `isError
 | `otp-error`               | When the user enters wrong otp more than 3 times in e-sign |   Yes   | true    |
 | `gateway-error`           | If gateway encounters an unexpected error                  |   Yes   | true    |
 | `esign-result`            | When signed in attached to the PDF                         |   Yes   | Maybe   |
- 
-### 5.1 `payload`
+
+<a name="message-payload"></a>
+### 7.1 `payload`
 The `message` that you will receive, in case of any type of event, may or may not have the `payload` property. In case of esign the payload would be one of the following.
 
-#### 5.1.1 `esign-result`
+<a name="message-esign-result"></a>
+#### 7.1.1 `esign-result`
 When you receive an event named `esign-result` that may or may not be an error type. You can check whether the event is an error or not with `isError` property. If the value is `true` then it's a error response. In case of success you will receive [success JSON response](#esignRespInitSuccess) and for error you will receive [error JSON response](#esignRespInitError)
 
-#### 5.1.2 `otp-error`
+<a name="message-otp-error"></a>
+#### 7.1.2 `otp-error`
 The `otp-error` event occurs when the user has entred wrong OTP more than 3 times. The format of the payload is given below.
 ```json
 {
@@ -523,7 +526,9 @@ The `otp-error` event occurs when the user has entred wrong OTP more than 3 time
     "statusCode": 422
 }
 ```
-#### 5.1.3 `gateway-error`
+
+<a name="message-gateway-error"></a>
+#### 7.1.3 `gateway-error`
 When gateway encounters an unexpected error this event is fired. The format of payload is given below.
 ```json
 {
@@ -533,9 +538,9 @@ When gateway encounters an unexpected error this event is fired. The format of p
 ```
 
 <a name="esignRespInit"></a>
-### 7. RESPONSE FORMAT SENT ON `responseURL` (ADDED IN INIT API CALL)
+### 8. Response Format Sent On `responseURL` (Added In Init API Call)
 <a name="esignRespInitSuccess"></a>
-#### 7.1 SUCCESS JSON RESPONSE FORMAT FOR E-SIGN SUCCESS
+#### 8.1 Success JSON Response Format For E-Sign Success
 ```json
 {
    "id": "ed15fc9f-5880-4b98-9671-4d094e5a8fe8",
@@ -588,7 +593,7 @@ When gateway encounters an unexpected error this event is fired. The format of p
 |]|  |
 
 <a name="esignRespInitError"></a>
-#### 7.2 ERROR JSON RESPONSE FORMAT FOR E_SIGN ERROR
+#### 8.2 Error JSON Response Format For E-Sign Error
 ```json
 {
    "id": "5c34f783-7930-43b7-a5c8-34b5222398de",
@@ -638,17 +643,18 @@ When gateway encounters an unexpected error this event is fired. The format of p
 
 
 <a name="esignStatus"></a>
-### 9. PULLING TRANSACTION STATUS AT BACKEND 
+### 9. Pulling Transaction Status At Backend 
 In case the POST API call to the response URL fails, there is an option to pull the transaction status from backend
 using the same **Esign Transaction Id**.
 
+<a name="esignInitURL"></a>
 #### 9.1 URL
 ```
 GET {{base_url}}/gateway/esign/:esign_transaction_id/fetch/
 ```
     
 <a name="esignStatusResp"></a>    
-#### 9.2 RESPONSE PARAMS:
+#### 9.2 Response Params:
 ```json
 {
   "id": "<<transaction id>>",
@@ -722,7 +728,8 @@ GET {{base_url}}/gateway/esign/:esign_transaction_id/fetch/
 |error_message| Error message from ESP/Internal (available only in case of error)|
 |request_timestamp } ,.. ]| Time at which the request was sent to ESP|
 
-### Annexure 1 – Transaction Status
+<a name="annexure"></a>
+### 10. Annexure – Transaction Status
 | Message | Code |
 |----|----|
 | INITIATED  | 1 |
