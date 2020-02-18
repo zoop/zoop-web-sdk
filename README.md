@@ -621,7 +621,7 @@ Also the responses incase of successful transaction as well as response in case 
 |message| Error message from gateway/sdk|
 
 <a name="esignRespInit"></a>
-### 7. RESPONSE FORMAT SENT ON RESPONSE_URL(ADDED IN INIT API CALL)
+### 7. RESPONSE FORMAT SENT ON `responseURL` (ADDED IN INIT API CALL)
 <a name="esignRespInitSuccess"></a>
 #### 7.1 SUCCESS JSON RESPONSE FORMAT FOR E-SIGN SUCCESS
 ```json
