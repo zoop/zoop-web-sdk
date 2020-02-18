@@ -2,6 +2,22 @@
 AadhaarAPI | ZOOP web SDK for E-sign and Bank Statement Analysis Gateway
 
 ## AadhaarAPI Bank Statement Analysis(BSA) Gateway 
+1. [INTRODUCTION](#bsaIntro)
+2. [PROCESS FLOW](#bsaProcessFlow)
+3. [INITIATING A GATEWAY TRANSACTION](#bsaInit)
+   - [INIT URL](#bsaInitUrl)
+   - [REQUEST HEADERS](#bsaRequestHeader)
+   - [REQUEST BODY PARAMS](#bsaRequestBody)
+   - [RESPONSE PARAMS](#bsaRespParam)
+4. [ADDING WEB SDK TO YOUR PROJECT](#bsaAddSDK)
+5. [WEBHOOK](#bsaWebhook)
+   - [SUCCESSFUL REQUEST BODY](#bsaSuccessWebhookReqBody)
+   - [FAILURE REQUEST BODY](#bsaErrorWebhookReqBody)
+   - [ERROR CODES AND MESSAGES](#bsaErrorCodeWebhook)
+6. [STAGE](#bsaStage)
+   - [SUCCESSFUL RESPONSE BODY](#bsaStageSuccess)
+   - [USER STAGES](#bsaUserStage)
+   - [FAILURE RESPONSE BODY](#bsaStageFailure)
 
 <a name="bsaIntro"></a>
 ### 1. INTRODUCTION 
