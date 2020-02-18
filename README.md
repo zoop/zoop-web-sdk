@@ -66,7 +66,7 @@ To initiate a gateway transaction a REST API call has to be made to backend. Thi
    - [Success JSON Response Format For E-Sign Success](#esignRespInitSuccess)
    - [Error JSON Response Format For E-Sign Error](#esignRespInitError)
 9. [Pulling Transaction Status At Backend](#esignStatus)
-   - [URL](#esignInitURL)
+   - [URL](#esignStatusURL)
    - [Response Params](#esignStatusResp)
 10. [Annexure](#annexure)
    
@@ -647,7 +647,7 @@ When gateway encounters an unexpected error this event is fired. The format of p
 In case the POST API call to the response URL fails, there is an option to pull the transaction status from backend
 using the same **Esign Transaction Id**.
 
-<a name="esignInitURL"></a>
+<a name="esignStatusURL"></a>
 #### 9.1 URL
 ```
 GET {{base_url}}/gateway/esign/:esign_transaction_id/fetch/
