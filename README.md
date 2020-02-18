@@ -731,7 +731,9 @@ In case the POST API call to the response URL fails, there is an option to pull 
 using the same **Esign Transaction Id**.
 
 #### 9.1 URL
-GET {{base_url}}/gateway/esign/:esign_transaction_id/fetch/ 
+```
+GET {{base_url}}/gateway/esign/:esign_transaction_id/fetch/
+```
     
 <a name="esignStatusResp"></a>    
 #### 9.2 RESPONSE PARAMS:
