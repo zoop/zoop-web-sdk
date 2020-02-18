@@ -11,11 +11,11 @@ AadhaarAPI | ZOOP web SDK for E-sign and Bank Statement Analysis Gateway
    - [RESPONSE PARAMS](#bsaRespParam)
 4. [ADDING WEB SDK TO YOUR PROJECT](#bsaAddSDK)
 5. [WEBHOOK](#bsaWebhook)
-   - [SUCCESSFUL REQUEST BODY](#bsaSuccessWebhookReqBody)
+   - [SUCCESS REQUEST BODY](#bsaSuccessWebhookReqBody)
    - [FAILURE REQUEST BODY](#bsaErrorWebhookReqBody)
    - [ERROR CODES AND MESSAGES](#bsaErrorCodeWebhook)
 6. [STAGE](#bsaStage)
-   - [SUCCESSFUL RESPONSE BODY](#bsaStageSuccess)
+   - [SUCCESS RESPONSE BODY](#bsaStageSuccess)
    - [USER STAGES](#bsaUserStage)
    - [FAILURE RESPONSE BODY](#bsaStageFailure)
 
@@ -27,7 +27,7 @@ AadhaarAPI | ZOOP web SDK for E-sign and Bank Statement Analysis Gateway
 <a name="bsaProcessFlow"></a>
 ### 2. PROCESS FLOW
 1. At your backend server, Initiate the BSA transaction using a simple Rest API [POST] call. Details of these are available in the documents later. You will require API key and Agency Id for accessing this API which can be generated from the Dashboard.
-2. This gateway transaction id then needs to be communicated back to the frontend via our Web SDK.
+2. This gateway transaction id then needs to be communicated back to the frontend to our Web SDK.
 3. After adding the Web SDK in your project, client has to pass the above generated transaction id to an SDK function, called `zoop.initBsaGateway(<<transaction_id>>)` which is to help us acknowladge about the transaction.
 4. After the initialization of the transaction, to open the gateway, you have to call `zoop.openBsaGateway()` function.
 5. Once the transaction is successful or failed, the provided webhook will be called with the data about the transaction. 
@@ -138,7 +138,7 @@ You can download or add the link to the CDN of our Web SDK. There are two functi
 ```
 
 <a name="bsaWebhook"></a>
-### 5. WEBHOOK
+### 5. Handling Webhook Response
 
 The webhook response will be sent to `webhook_url` provided at the init call. You might receive multiple responses for a single transaction. The response(s) will be send when the user start any kind of interaction with the gateway. When receiving the webhook response please match the webhook_security_key in the header of the request to be the same as the one provided in the init call. If they are not the same **you must abandon the webhook response**.
 
@@ -277,3 +277,4 @@ After creating an initialization request successfully you can check at which sta
 }
 ```
 
+In case you are facing any issues with integration please open a ticket on our [support portal](https://aadhaarapi.freshdesk.com/support/home)
