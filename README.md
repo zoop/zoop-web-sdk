@@ -424,201 +424,113 @@ The above generated gateway transactionId has to be made available to frontend t
 
  **Note:**  A transaction is valid only for 30 mins after generation. 
 
-<a name="esignAddSDK"></a>
-### 4. ADDING SDK (.AAR FILE) TO YOUR PROJECT
-To add SDK file as library in your Project, Perform the following Steps:
+### 4. Set Zoop Environment
 
-1. Right click on your project and choose “Open Module Settings”.
-2. Click the “+” button in the top left to add a new module.
-3. Choose “Import .JAR or .AAR Package” and click the “Next” button.
-4. Find the AAR file using the ellipsis button (“…”) beside the “File name” field.
-5. Keep the app’s module selected and click on the Dependencies pane to add the new
-module as a dependency.
-6. Use the “+” button of the dependencies screen and choose “Module dependency”.
-7. Choose the module and click “OK”. 
+First, you might have to specify the environment in which you want the SDK to run. By default, **staging** environment is picked if you forgot to specify any value. Valid environments are **production** and **staging**. To set the environment you call `setEnvironment` method from the provided SDK. This helps us to understand what type of transactions you are planning of doing.
+
+```js
+zoop.setEnvironment('production'); // Use 'staging' for staging environment
+```
+
+<a name="esignAddSDK"></a>
+### 4.ADDING WEB SDK TO YOUR PROJECT
+You can download or add the link to the CDN of our Web SDK. There are two function calls to open the gateway. They should called in the order mentioned in the docs. Firstly, to initiate the gateway you have to call `zoop.eSignGatewayInit(gatewayOptions)` with the [gateway option](#esign-gateway-setup). The next step would be to open the gateway. That can be done by simply calling `zoop.eSignGateway(<<transaction_id>>)` with the transaction ID generated in the init call. For your ease we have also added one simple example below.
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Your Site</title>
+  </head>
+  <body>
+    <!-- And add the code below into the body of your HTML -->
+    <div id="zoop-gateway-model">
+      <div id="zoop-model-content"></div>
+    </div>
+    <script src="https://static.aadhaarapi.com/sdk/v1.0.1/aadhaarapi-web-sdk.min.js"></script>
+    <script type="application/javascript">
+      // Name of the this function can be anything you want.
+      function openGateway() {
+         // To setup gateway UI to mach your application
+         zoop.eSignGatewayInit(gatewayOptions);
+         // Pass the transaction ID created at Init call
+         zoop.eSignGateway(<<transaction_id>>);
+      }
+    </script>
+  </body>
+</html>
+```
+
+<a name="esign-gateway-setup"></a>
+#### 4.1 Setup the gateway UI to match your application.
+```js
+const gatewayOptions = {
+    company_display_name: '<<Add your company name here>>', //(required)
+    front_text_color: 'FFFFFF', //(optional)Add the hex for colour of text of company name
+    background_color: '2C3E50', //(optional)Add the hex for background colour to be set for gateway.
+    logo_url: 'https://your-square-product-logo-image-url-here.png', //(required)
+    otp_allowed: 'y', // (optional) default value is 'y'
+    fingerprint_allowed: 'n', //(optional) default value 'y'
+    iris_allowed: 'n', //(optional) default value 'y',
+    phone_auth: 'n', //(optional) default value 'n',
+    draggable_sign: 'y', //(optional) default value ‘n’,
+    google_sign: 'n' //(optional) default value ‘y’
+};
+```
+
 
 <a name="esignConfigureSDK"></a>
-### 5. CONFIGURING AND LAUNCHING THE E-SIGN SDK 
-<a name="esignImportFiles"></a>
-#### 5.1  IMPORT FILES 
+### 5. Handle With Events 
 
-Import following files in your Activity:
-    
-    import one.zoop.sdkesign.esignlib.qtActivity.QTApiActivity;
-    import static one.zoop.sdkesign.esignlib.qtUtils.QtConstantUtils.ESIGN_ERROR;
-    import static one.zoop.sdkesign.esignlib.qtUtils.QtConstantUtils.ESIGN_SUCCESS;
-    import static one.zoop.sdkesign.esignlib.qtUtils.QtConstantUtils.QT_EMAIL;
-    import static one.zoop.sdkesign.esignlib.qtUtils.QtConstantUtils.QT_ENV;
-    import static one.zoop.sdkesign.esignlib.qtUtils.QtConstantUtils.QT_REQUEST_TYPE;
-    import static one.zoop.sdkesign.esignlib.qtUtils.QtConstantUtils.QT_RESULT;
-    import static one.zoop.sdkesign.esignlib.qtUtils.QtConstantUtils.QT_TRANSACTION_ID;
-    import static one.zoop.sdkesign.esignlib.qtUtils.QtConstantUtils.REQUEST_API;
-    import static one.zoop.sdkesign.esignlib.qtUtils.QtRequestType.ESIGN;
+Events are the way to acknowledge consumer of the SDK that something has happened. Listening of the events is same for each event.
 
-<a name="esignAddString"></a>
-#### 5.2 ADD STRINGS(IN STRINGS.XML FILE) 
+```html
+<script>
+   zoop.on('close', (message) => {
+      // handle the event
+   });
+   zoop.on('esign-result', (message) => {
+      // handle the event
+   });
+   // and so on...
+</script>
 
-Add following strings in Strings.xml according to the application’s requirement. 
+```
 
-    // must be ‘y' for allowing OTP based e-sign authentication to user; else ‘n’
-    <string name=“qt_otp_access">y</string>
-    // must be ‘y' for allowing Fingerprint based e-sign authentication to user; else ‘n’
-    <string name=“qt_fp_access">n</string>
-    // must be ‘y' for allowing Iris based e-sign authentication to user; else ‘n’
-    <string name=“ qt_iris_access">n</string>
-    // must be ‘y' for allowing Phone based login to user; else ‘n’ 
-    <string name=“qt_phone_auth_access">n</string>
-    // must be ‘y' for allowing signature’s position to be decided by the user; else ‘n’
-    <string name=“qt_draggable">y</string>                               
+The `message` parameter is an object which has `action`, `payload`, and `isError` properties.
 
-<a name="esignCallSDK"></a>
-#### 5.3 CALL E-SIGN SDK FROM THE ACTIVITY  
-**Use the Intent Function to call the E-Sign SDK from your Activity as shown below:**
-
-    String GatewayId, Email, environment;
-    Intent gatewayIntent = new Intent(YourActivity.this, QTApiActivity.class);
-    gatewayIntent.putExtra(QT_TRANSACTION_ID, GatewayId);
-    gatewayIntent.putExtra(QT_EMAIL, Email); //Not Mandatory, can be added to pre-fill the Login Box
-    gatewayIntent.putExtra(QT_REQUEST_TYPE, ESIGN.getRequest());
-    gatewayIntent.putExtra(QT_ENV, environment);
-    startActivityForResult(gatewayIntent, REQUEST_API);
-Params:
-GatewayId: “Transaction Id generated from your backend must be passed here”
-
-Email: “Add your end user’s email here to pre-fill the login box”
-
-environment: for pre-prod use "QT_PP" and for prod use "QT_P"
-
-Set the QT_REQUEST_TYPE as ESIGN.getRequest() for e-sign based transaction.
-
-Example:
-
-GatewayId = "a051231e-ddc7-449d-8635-bb823485a20d";
-
-Email = “youremail@gmail.com";
-
-environment = "QT_PP";
-
-<a name="esignHandleSDK"></a>
-#### 5.4 HANDLE SDK RESPONSE 
-
-After performing a Successful Transaction: Android download manager will start downloading the Signed PDF file. 
-
-Also the responses incase of successful transaction as well as response in case of error will be sent to your activity & can be handled via onActivityResult( ) method as shown below.
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-      if (requestCode == REQUEST_API && null != data) {
-        String requestType = data.getStringExtra(QT_REQUEST_TYPE);
-        String serviceType = data.getStringExtra(QT_SERVICE_TYPE);
-      if(requestType.equalsIgnoreCase(ESIGN.getRequest())){
-        //To handle the Success JSON response from SDK
-      if (resultCode == ESIGN_SUCCESS) {
-        String responseString = data.getStringExtra(QT_RESULT); //handle
-        successful response from AadhaarAPI’s e-sign SDK here
-        Log.i("SDK test response ", serviceType + " response: " +responseString); // can be removed
-        }
-        // To handle the Error JSON response from SDK 
-      if (resultCode == ESIGN_ERROR) {
-       String errorString = data.getStringExtra(QT_RESULT); //handle
-        error response from AadhaarAPI’s e-sign SDK here
-        Log.i("SDK test error ", serviceType + " error: "+ errorString); // can be removed
-        }
-      }
-    }
+| Event Name (action)       | Occurs When                                                | payload | isError |
+| ------------------------- | :--------------------------------------------------------- | :-----: | ------- |
+| `close`                   | User manually clicks on the close icon                     |   No    | false   |
+| `consent-denied`          | When user denies to it's consent for e-sign                |   No    | false   |
+| `otp-error`               | When the user enters wrong otp more than 3 times in e-sign |   Yes   | true    |
+| `gateway-error`           | If gateway encounters an unexpected error                  |   Yes   | true    |
+| `esign-result`            | When signed in attached to the PDF                         |   Yes   | Maybe   |
  
-<a name="esignRespMobile"></a> 
-### 6. RESPONSE FORMAT SENT ON MOBILE 
-<a name="esignSuccessRespMob"></a>
-#### 6.1 SUCCESS JSON RESPONSE FORMAT FOR E-SIGN SUCCESS
-    { "id": “<<transaction_Id>>",
-    "response_timestamp": "2018-08-01T09:50:06.831Z",
-    "transaction_status": 16,
-    "signer_consent": "Y",
-    "request_medium": “ANDROID",
-    "last_document": “true",
-    "current_document": 1,
-    "documents": [
-    { "id": “<<unique-document-id >>”,
-     "index": 1,
-     "type": “pdf",
-     "doc_info": "Sample pdf - sample doc",
-     "dynamic_url": “<<links-to-download-document>>”,
-     "sign_status": "Y",
-     "auth_mode": "O",
-     "response_status": "Y",
-     "error_code": null,
-     "error_message": null,
-     "request_timestamp": “2018-08-01T09:50:06.831Z” }, ….
-    ], "dynamic_url": “<<links-to-download-document>>”,
-     "msg": “<<Esign Message from ESP/Internal>>” }
-     
-| Response Parameter  | Description/Possible Values |
-| ------------- | ------------- |
-| id | E-sign Transaction Id  |
-| response_timestamp | ESP response timestamp |
-| transaction_status | Status Code to track last transaction state. List of codes available in Annexure1. |
-| signer_consent | Y/N - Will be N if user denies consent |
-| request_medium | WEB/ANDROID - Platform from which esign transaction was performed |
-| last_document | true/false- true if document is last else false |
-| documents[ | Is an object that provides details of the single/multiple documents in array. It has below mentioned values in the object|
-| { id | Document id |
-| index | Index of this document |
-| doc_info | Info of this document |
-| type | Format of the document. For now, only value pdf is supported |
-| dynamic_url | Url to download the signed pdf |
-| sign_status | Y/N - if document is signed by the user or not |
-| auth_mode | O/F/I – OTP, Fingerprint, Iris |
-| response_status | Y/N - if ESP response was success or not. |
-| error_code | Error code from ESP/Internal (available only in case of error) |
-| error_message | Error message from ESP/Internal (available only in case of error) |
-| request_timestamp } | Time at which the request was sent to ESP |
-| ] dynamic_url | Url to download the signed pdf of the current document |
-| message | Message from ESP/Internal |
+### 5.1 `payload`
+The `message` that you will receive, in case of any type of event, may or may not have the `payload` property. In case of esign the payload would be one of the following.
 
-<a name="esignErrorRespMob"></a>
-#### 6.2 ERROR JSON RESPONSE FORMAT FOR E_SIGN ERROR 
-    { "id": “<<transaction id>>",
-    "signer_name": “Abc Name",
-    "signer_city": “xyz city",
-    "current_document": 1,
-    "user_notified": "N",
-    "purpose": "Development and testing purpose",
-    "transaction_status": 17,
-    "signer_consent": "Y",
-    "request_medium": "ANDROID",
-    "signed_document_count": 0,
-    "error_code": "ESP-123",
-    "error_message": “<<Error Message>>","response_status": "N",
-    "response_timestamp": “2018-08-01T12:09:48.500Z”,
-    "msg": "Error Code :ESP-123 (<<Error Message>>)” } 
-    
-|Response Parameter| Description/Possible Values|
-| ------------- | ------------- |
-|id |E-sign Transaction Id|
-|signer_name| Name of signer as provided in INIT call.|
-|signer_city| City of signer as provided in INIT call.|
-|current_document| Current document number|
-|signer_consent| Y/N - Will be N if user denies consent|
-|request_medium |WEB/ANDROID - Platform from which esign transaction was performed|
-|Purpose| Purpose for signing the document |
-|user_notified| Y/N - User notified of the E-sign success and sent a copy of document to download.|
-|transaction_status| Status Code to track last transaction state. List of codes available in Annexure1.|
-|signed_document_count| count of the number of documents signed|
-|response_status| Y/N - if ESP response was success or not.|
-|error_code| Error code from ESP/Internal (available only in case of error)|
-|error_message| Error message from ESP/Internal (available only in case of error)|
-|response_timestamp| ESP response timestamp.|
-|msg|Error code and error message|
+#### 5.1.1 `esign-result`
+When you receive an event named `esign-result` that may or may not be an error type. You can check whether the event is an error or not with `isError` property. If the value is `true` then it's a error response. In case of success you will receive [success JSON response](#esignRespInitSuccess) and for error you will receive [error JSON response](#esignRespInitError)
 
-<a name="esignErrorRespGateway"></a>
-#### 6.3 ERROR JSON RESPONSE FORMAT FOR GATEWAY ERROR 
-    {"statusCode": 422,
-     "message": "Maximum OTP Tries Reached, Transaction Failed” } 
-|Response Parameter| Description/Possible Values|
-| ---------- | ----------- |
-|statusCode| Error code from gateway/sdk|
-|message| Error message from gateway/sdk|
+#### 5.1.2 `otp-error`
+The `otp-error` event occurs when the user has entred wrong OTP more than 3 times. The format of the payload is given below.
+```json
+{
+    "message": "Maximum OTP Tries Reached, Transaction Failed",
+    "statusCode": 422
+}
+```
+#### 5.1.3 `gateway-error`
+When gateway encounters an unexpected error this event is fired. The format of payload is given below.
+```json
+{
+    "message": "Transaction is already completed or errored out.",
+    "statusCode": "412"
+}
+```
 
 <a name="esignRespInit"></a>
 ### 7. RESPONSE FORMAT SENT ON `responseURL` (ADDED IN INIT API CALL)
