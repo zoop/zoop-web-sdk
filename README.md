@@ -645,8 +645,14 @@ The webhook response will be sent to `webhook_url` provided at the init call. Yo
   "data": {
     "metadata": {
       "acc_number": "<<account_number>>",
-      "start_date": "13/02/2019",
-      "end_date": "12/02/2020"
+      "acc_name": "<<account_holder_name>>",
+      "no_of_transactions": "<<transaction_counts>>",
+      "dates": {
+        "first_transaction_date": "2019-08-26",
+        "last_transaction_date": "2020-02-16",
+        "statement_start_date": "2019-08-19",
+        "statement_end_date": "2020-02-18"
+      }
     },
     "transactions": [
       {
