@@ -3,7 +3,7 @@ AadhaarAPI | ZOOP web SDK for E-sign and Bank Statement Analysis Gateway
 
 # Table of Contents
 
-## AadhaarAPI E-Sign Gateway.
+## Zoop E-Sign Gateway.
 1. [Introduction](#esignIntroduction)
 2. [Process Flow](#esignProcessFlow)
 3. [End User Flow](#esignEndUserFlow)
@@ -28,7 +28,7 @@ AadhaarAPI | ZOOP web SDK for E-sign and Bank Statement Analysis Gateway
    - [Response Params](#esignStatusResp)
 10. [Annexure](#annexure)
 
-## AadhaarAPI Bank Statement Analysis(BSA) Gateway 
+## Zoop Bank Statement Analysis(BSA) Gateway 
 1. [INTRODUCTION](#bsaIntro)
 2. [PROCESS FLOW](#bsaProcessFlow)
 3. [INITIATING A GATEWAY TRANSACTION](#bsaInit)
@@ -46,7 +46,7 @@ AadhaarAPI | ZOOP web SDK for E-sign and Bank Statement Analysis Gateway
    - [USER STAGES](#bsaUserStage)
    - [FAILURE RESPONSE BODY](#bsaStageFailure)
 
-## AadhaarAPI E-Sign Gateway 
+## Zoop E-Sign Gateway 
 
 <a name="esignIntroduction"></a>
 ### 1. Introduction
@@ -502,7 +502,7 @@ GET {{base_url}}/gateway/esign/:esign_transaction_id/fetch/
 | USER_NOTIFIED | 18 |
 | TRANSACTION_LIMIT_CROSSED | 19 |
 
-## AadhaarAPI Bank Statement Analysis(BSA) Gateway
+## Zoop Bank Statement Analysis(BSA) Gateway
 
 <a name="bsaIntro"></a>
 ### 1. INTRODUCTION 
