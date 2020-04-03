@@ -788,10 +788,10 @@ The webhook response will be sent to `webhook_url` provided at the init call. Yo
 | 658  | false    | No Entry Found Error               |
 | 659  | false    | Stage Timeout Error                |
 | 660  | false    | Session Closed On Retry            |
-| 661  | false    | 'Login Attempts Exceeded Error',   |
-| 662  | false    | 'Captcha Attempts Exceeded Error', |
-| 663  | false    | 'OTP Attempts Exceeded Error',     |
-| 664  | false    | 'Answer-Attempts Exceeded Error',  |
+| 661  | false    | Login Attempts Exceeded Error,     |
+| 662  | false    | Captcha Attempts Exceeded Error,   |
+| 663  | false    | OTP Attempts Exceeded Error,       |
+| 664  | false    | Answer-Attempts Exceeded Error,    |
 | 670  | false    | No Session Found Error             |
 | 671  | false    | Error Not Recorded                 |
 
