@@ -774,22 +774,27 @@ The webhook response will be sent to `webhook_url` provided at the init call. Yo
 <a name="bsaErrorCodeWebhook"></a>
 #### 5.3 RESPONSE CODES AND MESSAGES
 
-| Code  | Billable | Message |
-|---|---|---|
-| 101 | true | Transaction Success |
-| 99  | false | Unknown Error |
-| 651 | false | Technical Error |
-| 652 | false | Session Closed |
-| 653 | false | Bank Server Unresponsive Error |
-| 654 | false | Consent Denied Error |
-| 655 | false | Document Parsing Error |
-| 656 | false | Validity Expiry Error |
-| 657 | false | Authentication Error |
-| 658 | false | No Entry Found Error |
-| 659 | false | Stage Timeout Error |
-| 660 | false | Session Closed On Retry |
-| 670 | false | No Session Found Error |
-| 671 | false | Error Not Recorded |
+| Code | Billable | Message                            |
+| ---- | -------- | ---------------------------------- |
+| 101  | true     | Transaction Success                |
+| 99   | false    | Unknown Error                      |
+| 651  | false    | Technical Error                    |
+| 652  | false    | Session Closed                     |
+| 653  | false    | Bank Server Unresponsive Error     |
+| 654  | false    | Consent Denied Error               |
+| 655  | false    | Document Parsing Error             |
+| 656  | false    | Validity Expiry Error              |
+| 657  | false    | Authentication Error               |
+| 658  | false    | No Entry Found Error               |
+| 659  | false    | Stage Timeout Error                |
+| 660  | false    | Session Closed On Retry            |
+| 661  | false    | 'Login Attempts Exceeded Error',   |
+| 662  | false    | 'Captcha Attempts Exceeded Error', |
+| 663  | false    | 'OTP Attempts Exceeded Error',     |
+| 664  | false    | 'Answer-Attempts Exceeded Error',  |
+| 670  | false    | No Session Found Error             |
+| 671  | false    | Error Not Recorded                 |
+
 
 <a name="bsaStage"></a>
 
