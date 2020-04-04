@@ -266,7 +266,7 @@ const gatewayOptions = {
   iris_allowed: "n", //(optional) default value 'y',
   phone_auth: "n", //(optional) default value 'n',
   draggable_sign: "y", //(optional) default value ‘n’,
-  google_sign: "n" //(optional) default value ‘y’
+  google_sign: "n", //(optional) default value ‘y’
 };
 ```
 
@@ -278,10 +278,10 @@ Events are the way to acknowledge consumer of the SDK that something has happene
 
 ```html
 <script>
-  zoop.on("close", message => {
+  zoop.on("close", (message) => {
     // handle the event
   });
-  zoop.on("esign-result", message => {
+  zoop.on("esign-result", (message) => {
     // handle the event
   });
   // and so on...
@@ -996,15 +996,15 @@ You can download or add the link to the CDN of our Web SDK. There are two functi
         bg_color: "rgb(243,243,243)",
         btn_color: "rgb(0,105,180)",
         btn_txt_color: "rgb(255,255,255)",
-        logo_url: "https://your-awesome-logo.png"
+        logo_url: "https://your-awesome-logo.png",
       };
       // The following event will be fired in case of any error received
-      zoop.on("itr-error", message => {
+      zoop.on("itr-error", (message) => {
         // If any error happen then this errorCode will be passed to the user
         console.log(message);
       });
       // The following event will be fired once ITR pulled successfully
-      zoop.on("itr-success", message => {
+      zoop.on("itr-success", (message) => {
         // If any error happen then this errorCode will be passed to the user
         console.log(message);
       });
@@ -1032,7 +1032,7 @@ const gatewayOption = {
   bg_color: "rgb(243,243,243)", // The background color
   btn_color: "rgb(0,105,180)", // Color of the button
   btn_txt_color: "rgb(255,255,255)", // Color of the text in button
-  logo_url: "https://your-awesome-logo.png" // The URL of your logo
+  logo_url: "https://your-awesome-logo.png", // The URL of your logo
 };
 ```
 
@@ -1043,6 +1043,52 @@ const gatewayOption = {
 #### 4.2 Handling Events
 
 There are two events to acknowledge of the ongoing transaction to your frontend. On success `itr-success` event will be fired and respective callback will executed, similarly `itr-error` will be fired in case of any error in the transaction. You find the usage in the provided [demo](#itr-sdk-example).
+
+#### 4.2.1 Event: `itr-success`
+
+When ITR pulling is successful this event is fired and you will receive the `message` on the respective registered callback function. The `message` is an object with `action` and `payload` property on it.
+
+The `payload` has `id`, `response_code`, and `response_message` properties.
+
+| response_code | response_message           |
+| ------------- | -------------------------- |
+| 101           | ITR transaction successful |
+
+```json
+{
+  "action": "itr-success",
+  "payload": {
+    "id": "<<transaction_id>>",
+    "response_code": "101",
+    "response_message": "Transaction Successful"
+  }
+}
+```
+
+#### 4.2.2 Event: `itr-error`
+
+This event is fired when any error occurred while processing the transaction and respective callback is called and `message` parameter is passed. The `message` is an object with `action` and `payload` property on it.
+
+The `payload` has `id`, `response_code`, and `response_message` properties.
+
+| response_code | response_message           |
+| ------------- | -------------------------- |
+| 601           | Unknown Error              |
+| 602           | Unable to download ITR     |
+| 603           | Unable to process response |
+| 604           | Unable to submit the OTP   |
+| 605           | Unable to parse ITR        |
+
+```json
+{
+  "action": "itr-error",
+  "payload": {
+    "id": "<<transaction_id>>",
+    "response_code": "602",
+    "response_message": "Unable to download ITR"
+  }
+}
+```
 
 <a name="itrWebhook"></a>
 
@@ -1336,11 +1382,15 @@ The webhook response will be sent to `webhook_url` provided at the init call. Wh
 
 <a name="itrErrorCodeWebhook"></a>
 
-#### 5.3 ERROR CODES AND MESSAGES
+#### 5.3 RESPONSE CODES AND MESSAGES
 
-| Code | Billable | Message                |
-| ---- | -------- | ---------------------- |
-| 100  | false    | Transaction Failure    |
-| 101  | true     | Transaction Successful |
+| Code | Billable | Message                    |
+| ---- | -------- | -------------------------- |
+| 101  | true     | Transaction Successful     |
+| 601  | false    | Unknown Error              |
+| 602  | false    | Unable to download ITR     |
+| 603  | false    | Unable to process response |
+| 604  | false    | Unable to submit the OTP   |
+| 605  | false    | Unable to parse ITR        |
 
 In case you are facing any issues with integration please open a ticket on our [support portal](https://aadhaarapi.freshdesk.com/support/home)
