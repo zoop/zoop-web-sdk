@@ -266,7 +266,7 @@ const gatewayOptions = {
   iris_allowed: "n", //(optional) default value 'y',
   phone_auth: "n", //(optional) default value 'n',
   draggable_sign: "y", //(optional) default value ‘n’,
-  google_sign: "n", //(optional) default value ‘y’
+  google_sign: "n" //(optional) default value ‘y’
 };
 ```
 
@@ -996,7 +996,7 @@ You can download or add the link to the CDN of our Web SDK. There are two functi
         bg_color: "rgb(243,243,243)",
         btn_color: "rgb(0,105,180)",
         btn_txt_color: "rgb(255,255,255)",
-        logo_url: "https://your-awesome-logo.png",
+        logo_url: "https://your-awesome-logo.png"
       };
       // The following event will be fired in case of any error received
       zoop.on("itr-error", (message) => {
@@ -1032,7 +1032,7 @@ const gatewayOption = {
   bg_color: "rgb(243,243,243)", // The background color
   btn_color: "rgb(0,105,180)", // Color of the button
   btn_txt_color: "rgb(255,255,255)", // Color of the text in button
-  logo_url: "https://your-awesome-logo.png", // The URL of your logo
+  logo_url: "https://your-awesome-logo.png" // The URL of your logo
 };
 ```
 
@@ -1078,6 +1078,7 @@ The `payload` has `id`, `response_code`, and `response_message` properties.
 | 603           | Unable to process response |
 | 604           | Unable to submit the OTP   |
 | 605           | Unable to parse ITR        |
+| 606           | Session expired or invalid |
 
 ```json
 {
@@ -1392,5 +1393,6 @@ The webhook response will be sent to `webhook_url` provided at the init call. Wh
 | 603  | false    | Unable to process response |
 | 604  | false    | Unable to submit the OTP   |
 | 605  | false    | Unable to parse ITR        |
+| 606  | false    | Session expired or invalid |
 
 In case you are facing any issues with integration please open a ticket on our [support portal](https://aadhaarapi.freshdesk.com/support/home)
