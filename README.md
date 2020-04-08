@@ -702,7 +702,7 @@ The webhook response will be sent to `webhook_url` provided at the init call. Yo
   "mode": "REDIRECT",
   "env": "PRODUCTION",
   "bank": "YESBANK",
-  "response_code": 1,
+  "response_code": "101",
   "response_message": "Transaction Successful",
   "last_user_stage_code": "<<Stage Code>>",
   "last_user_stage": "<<Stage>>",
@@ -757,8 +757,8 @@ The webhook response will be sent to `webhook_url` provided at the init call. Yo
   "mode": "REDIRECT",
   "env": "PRODUCTION",
   "bank": "SBI",
-  "response_code": 0,
-  "response_message": "Transaction Failure",
+  "response_code": "651",
+  "response_message": "Technical Error",
   "last_user_stage_code": "<<Stage Code>>",
   "last_user_stage": "<<Stage>>",
   "request_version": "1.0",
@@ -772,23 +772,29 @@ The webhook response will be sent to `webhook_url` provided at the init call. Yo
 ```
 
 <a name="bsaErrorCodeWebhook"></a>
+#### 5.3 RESPONSE CODES AND MESSAGES
 
-#### 5.3 ERROR CODES AND MESSAGES
+| Code | Billable | Message                            |
+| ---- | -------- | ---------------------------------- |
+| 101  | true     | Transaction Success                |
+| 99   | false    | Unknown Error                      |
+| 651  | false    | Technical Error                    |
+| 652  | false    | Session Closed                     |
+| 653  | false    | Bank Server Unresponsive Error     |
+| 654  | false    | Consent Denied Error               |
+| 655  | false    | Document Parsing Error             |
+| 656  | false    | Validity Expiry Error              |
+| 657  | false    | Authentication Error               |
+| 658  | false    | No Entry Found Error               |
+| 659  | false    | Stage Timeout Error                |
+| 660  | false    | Session Closed On Retry            |
+| 661  | false    | Login Attempts Exceeded Error,     |
+| 662  | false    | Captcha Attempts Exceeded Error,   |
+| 663  | false    | OTP Attempts Exceeded Error,       |
+| 664  | false    | Answer-Attempts Exceeded Error,    |
+| 670  | false    | No Session Found Error             |
+| 671  | false    | Error Not Recorded                 |
 
-| Code | Message                        |
-| ---- | ------------------------------ |
-| 651  | Technical Error                |
-| 652  | Session Closed                 |
-| 653  | Bank Server Unresponsive Error |
-| 654  | Consent Denied Error           |
-| 655  | Document Parsing Error         |
-| 656  | Validity Expiry Error          |
-| 657  | Authentication Error           |
-| 658  | No Entry Found Error           |
-| 659  | Stage Timeout Error            |
-| 660  | Session Closed On Retry        |
-| 670  | No Session Found Error         |
-| 671  | Error Not Recorded             |
 
 <a name="bsaStage"></a>
 
@@ -804,13 +810,15 @@ After creating an initialization request successfully you can check at which sta
 
 ```json
 {
-  "id": "<<transaction_id>>",
-  "mode": "REDIRECT",
-  "env": "PRODUCTION",
-  "request_version": "1.0",
-  "bank": "SBI",
-  "last_user_stage": "login_opened",
-  "last_user_stage_code": "LO"
+    "id": "<<transaction_id>>",
+    "mode": "REDIRECT",
+    "env": "PRODUCTION",
+    "request_version": "1.0",
+    "response_code": "101",
+    "response_message": "Transaction Successful",
+    "bank": "SBI",
+    "last_user_stage": "login_opened",
+    "last_user_stage_code": "LO"
 }
 ```
 
