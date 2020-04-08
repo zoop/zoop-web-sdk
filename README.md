@@ -49,6 +49,23 @@ AadhaarAPI | ZOOP web SDK for E-sign and Bank Statement Analysis Gateway
    - [USER STAGES](#bsaUserStage)
    - [FAILURE RESPONSE BODY](#bsaStageFailure)
 
+## Zoop Income Tax Return (ITR) Gateway (Beta)
+
+1. [Introduction](#itrIntro)
+2. [Process Flow](#itrProcessFlow)
+3. [Initiate a gateway transaction](#itrInit)
+   - [Init URL](#itrInitUrl)
+   - [Request Header](#itrRequestHeader)
+   - [Request Body Params](#itrRequestBody)
+   - [Response Params](#itrRespParam)
+4. [Adding Web SDK To Your Project](#itrAddSDK)
+   - [Gateway Option Format](#itrGatewayOption)
+   - [Handling Events](#itrHandlingEvents)
+5. [Webhook](#itrWebhook)
+   - [Success Request Body](#itrSuccessWebhookReqBody)
+   - [Failure Request Body](#itrErrorWebhookReqBody)
+   - [Error Codes and Messages](#itrErrorCodeWebhook)
+
 ## Zoop E-Sign Gateway
 
 <a name="esignIntroduction"></a>
@@ -261,10 +278,10 @@ Events are the way to acknowledge consumer of the SDK that something has happene
 
 ```html
 <script>
-  zoop.on("close", message => {
+  zoop.on("close", (message) => {
     // handle the event
   });
-  zoop.on("esign-result", message => {
+  zoop.on("esign-result", (message) => {
     // handle the event
   });
   // and so on...
@@ -851,5 +868,539 @@ After creating an initialization request successfully you can check at which sta
   "message": "transaction id not found in our records"
 }
 ```
+
+## ZOOP INCOME TAX RETURN (ITR) GATEWAY (Beta)
+
+<a name="itrIntro"></a>
+
+### 1. Introduction
+
+Income Tax Return is the form in which assessee files information about his Income and tax thereon to Income Tax Department. The Zoop ITR Gateway allows allows you to fetch the tax returns of your client and make better business decision on them.
+
+<a name="itrProcessFlow"></a>
+
+### 2. Process Flow
+
+1. At your backend server, Initiate the ITR transaction using a simple POST Rest API call. Details of these are available in the documents later. You will require API key and Agency Id for accessing this API which can be generated from the Dashboard. This gateway transaction id then needs to be communicated back to the frontend to our Web SDK.
+2. This gateway transaction id then needs to be communicated back to the frontend to our Web SDK.
+3. After adding the Web SDK in your project, client has to pass the above generated transaction id to an SDK function, called `zoop.initIncomeTaxReturns(gatewayOption)` which is to help us to under different requirement of the gateway you are trying to open.
+4. After the initialization of the transaction, to open the gateway, you have to call `zoop.openIncomeTaxReturnsGateway(<<transaction_id>>)` function.
+5. Once the transaction is successful or failed, the provided webhook will be called with the data about the transaction.
+6. Client will also have a REST API available to pull the status of a gateway transaction from backend.
+
+<a name="itrInit"></a>
+
+### 3. INITIATING A GATEWAY TRANSACTION
+
+To initiate a gateway transaction a REST API call has to be made to backend. This call will generate a Gateway Transaction Id which needs to be passed to the frontend web-sdk to launch the gateway.
+
+<a name="itrInitUrl"></a>
+
+#### 3.1 INIT URL:
+
+    URL: POST: {{base_url}}/itr/v1/init
+
+**{{base_url}}**:
+
+**For Pre-Production Environment:** https://preprod.aadhaarapi.com
+
+**For Production Environment:** https://prod.aadhaarapi.com
+
+**Example Url:** https://preprod.aadhaarapi.com/itr/v1/init
+
+<a name="itrRequestHeader"></a>
+
+#### 3.2 REQUEST HEADERS: [All Mandatory]
+
+**qt_api_key** -- API key generated via Dashboard (PREPROD and PROD)
+
+**qt_agency_id** -- Agency ID available from My account section in Dashboard
+
+Content-Type: application/json
+
+<a name="itrRequestBody"></a>
+
+#### 3.3 REQUEST BODY PARAMS:
+
+```json
+{
+  "mode": "POPUP",
+  "redirect_url": "https://google.com",
+  "webhook_url": "https://webhook.site/7772560d-c97d-43cc-bf8e-248dc41946e1",
+  "purpose": "load agreement",
+  "phone": "<<PHONE>>",
+  "pan": "<<PAN_NUMBER>>",
+  "dob": "<<DOB>>",
+  "pdf_required": "Y",
+  "duration": 3
+}
+```
+
+| Parameters   | Mandatory | Description/Value                                    |
+| ------------ | --------- | ---------------------------------------------------- |
+| mode         | true      | REDIRECT or POPUP                                    |
+| redirect_url | false     | A valid URL                                          |
+| webhook_url  | true      | A valid URL                                          |
+| purpose      | true      | Your purpose                                         |
+| phone        | true      | Phone number linked to ITR portal                    |
+| pan          | true      | PAN number linked to ITR portal                      |
+| dob          | true      | Date of birth of the PAN holder in YYYY-MM-DD format |
+| pdf_required | false     | Whether you need PDF of ITR fetched                  |
+| duration     | false     | Years for which ITR details to fetch                 |
+
+<a name="itrRespParam"></a>
+
+#### 3.4 RESPONSE PARAMS:
+
+##### 3.4.1 Successful Response:
+
+```json
+{
+  "id": "<<transaction_id>>",
+  "mode": "POPUP",
+  "env": "PRODUCTION",
+  "webhook_security_key": "<<UUID>>",
+  "request_version": "1.0",
+  "request_timestamp": "2020-02-17T13:14:26.423Z",
+  "expires_at": "2020-02-17T13:24:26.423Z"
+}
+```
+
+The above generated gateway transactionId is needed to make open gateway via WEB SDK.
+
+**Note:** A transaction is valid only for 10 mins after generation.
+
+##### 3.4.2 Failure Response:
+
+```json
+{
+  "statusCode": 400,
+  "errors": [],
+  "message": "<<message about the error>>"
+}
+```
+
+<a name="itrAddSDK"></a>
+
+### 4. Adding Web SDK To Your Project
+
+You can download or add the link to the CDN of our Web SDK. There are two function calls to open the gateway. They should called in the order mentioned in the docs. Firstly, to initiate the gateway you have to call `zoop.initIncomeTaxReturns(gatewayOption)` with the gateway option to modify the gateway UI. The next step would be to open the gateway. That can be done by simply calling `zoop.openIncomeTaxReturnsGateway(<<transaction_id>>)` and pass the transaction id generated in the init call first parameter. For your ease we have also added one simple example below.
+
+<a name="itr-sdk-example">
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Your Site</title>
+  </head>
+  <body>
+    <script src="https://static.aadhaarapi.com/sdk/v1.0.1/aadhaarapi-web-sdk.min.js"></script>
+    <script type="application/javascript">
+      const gatewayOption = {
+        txt_color: "rgb(102,102,102)",
+        bg_color: "rgb(243,243,243)",
+        btn_color: "rgb(0,105,180)",
+        btn_txt_color: "rgb(255,255,255)",
+        logo_url: "https://your-awesome-logo.png"
+      };
+      // The following event will be fired in case of any error received
+      zoop.on("itr-error", (message) => {
+        // If any error happen then this errorCode will be passed to the user
+        console.log(message);
+      });
+      // The following event will be fired once ITR pulled successfully
+      zoop.on("itr-success", (message) => {
+        // If any error happen then this errorCode will be passed to the user
+        console.log(message);
+      });
+      // Name of the this function can be anything you want.
+      function openGateway() {
+        // Pass gateway option to modify UI here.
+        zoop.initIncomeTaxReturns(gatewayOption);
+        // Call this function with transaction ID to open the gateway
+        zoop.openIncomeTaxReturnsGateway("<<transaction_id>>");
+      }
+    </script>
+  </body>
+</html>
+```
+
+<a name="itrGatewayOption"></a>
+
+#### 4.1 Gateway Option Format
+
+The options parameter that is passed while calling `zoop.initIncomeTaxReturns` has the following format.
+
+```js
+const gatewayOption = {
+  txt_color: "rgb(102,102,102)", // The text color
+  bg_color: "rgb(243,243,243)", // The background color
+  btn_color: "rgb(0,105,180)", // Color of the button
+  btn_txt_color: "rgb(255,255,255)", // Color of the text in button
+  logo_url: "https://your-awesome-logo.png" // The URL of your logo
+};
+```
+
+**NOTE**: We pass the provided values through URL and because of that **support of HEX color values are not present**. You can provide alternative color formats like rgb, rgba, hsl, hsla etc.
+
+<a name="itrHandlingEvents"></a>
+
+#### 4.2 Handling Events
+
+There are two events to acknowledge of the ongoing transaction to your frontend. On success `itr-success` event will be fired and respective callback will executed, similarly `itr-error` will be fired in case of any error in the transaction. You find the usage in the provided [demo](#itr-sdk-example).
+
+#### 4.2.1 Event: `itr-success`
+
+When ITR pulling is successful this event is fired and you will receive the `message` on the respective registered callback function. The `message` is an object with `action` and `payload` property on it.
+
+The `payload` has `id`, `response_code`, and `response_message` properties.
+
+| response_code | response_message           |
+| ------------- | -------------------------- |
+| 101           | ITR transaction successful |
+
+```json
+{
+  "action": "itr-success",
+  "payload": {
+    "id": "<<transaction_id>>",
+    "response_code": "101",
+    "response_message": "Transaction Successful"
+  }
+}
+```
+
+#### 4.2.2 Event: `itr-error`
+
+This event is fired when any error occurred while processing the transaction and respective callback is called and `message` parameter is passed. The `message` is an object with `action` and `payload` property on it.
+
+The `payload` has `id`, `response_code`, and `response_message` properties.
+
+| response_code | response_message           |
+| ------------- | -------------------------- |
+| 601           | Unknown Error              |
+| 602           | Unable to download ITR     |
+| 603           | Unable to process response |
+| 604           | Unable to submit the OTP   |
+| 605           | Unable to parse ITR        |
+| 606           | Session expired or invalid |
+
+```json
+{
+  "action": "itr-error",
+  "payload": {
+    "id": "<<transaction_id>>",
+    "response_code": "602",
+    "response_message": "Unable to download ITR"
+  }
+}
+```
+
+<a name="itrWebhook"></a>
+
+### 5. Handling Webhook Response
+
+The webhook response will be sent to `webhook_url` provided at the init call. When receiving the webhook response please match the `webhook_security_key` in the header of the request to be the same as the one provided in the init call. If they are not the same **you must abandon the webhook response**.
+
+<a name="itrSuccessWebhookReqBody"></a>
+
+#### 5.1 SUCCESSFUL REQUEST BODY
+
+```json
+{
+  "id": "<<transaction_id>>",
+  "mode": "POPUP",
+  "env": "PRODUCTION",
+  "response_code": "101",
+  "response_message": "Transaction Successful",
+  "phone_number": "<<PHONE>>",
+  "dob": "<<DOB>>",
+  "request_version": "1.0",
+  "pan": "<<PAN_NUMBER>>",
+  "request_medium": "<<web | android | ios>>",
+  "sdk_name": "1",
+  "data": {
+    "transactions": [
+      {
+        "2019-20": {
+          "PersonalInfo": {
+            "Name": "<<NAME>>",
+            "PAN": "<<PAN_NUMBER>>",
+            "DOB": "<<DATE_OF_BIRTH>>",
+            "Address": {
+              "ResidenceName": "",
+              "LocalityOrArea": "<<AREA>>",
+              "RoadOrStreet": "",
+              "ResidenceNo": "<<RESIDENCE_NO>>",
+              "PinCode": "<<PIN>>",
+              "CityOrTownOrDistrict": "<<CITY_OR_TOWN>>",
+              "MobileNo": "91 - <<PHONE>>",
+              "State": "<<STATE>>",
+              "EmailAddress": "<<EMAIL>>"
+            },
+            "AadhaarCardNo": "<<AADHAAR_NUMBER>>",
+            "EmployerCategory": "Not Applicable(eg. Family pension etc)"
+          },
+          "ITR1_IncomeDeductions": {
+            "ProfitsInSalary": "0",
+            "Salary": "<<SALARY>>",
+            "AlwnsNotExempt": "0",
+            "IncomeFromSal": "<<SALARY>>",
+            "UsrDeductUndChapVIA": {
+              "Section80DD": "0\r0",
+              "TotalChapVIADeductions": "0",
+              "Section80GGA": "0",
+              "Section80CCG": "0",
+              "Section80GG": "0",
+              "Section80CCDEmployer": "0",
+              "Section80CCD1B": "0",
+              "Section80GGC": "0",
+              "Section80TTA": "0",
+              "Section80DHealthInsPremium": {
+                "Sec80DHealthInsurancePremiumUsr": "0\r0\r0"
+              },
+              "Section80CCDEmployeeOrSE": "0",
+              "Section80E": "0",
+              "Section80C": "0",
+              "Section80CCC": "0",
+              "Section80EE": "0"
+            },
+            "IncomeOthSrc": "0",
+            "GrossTotIncome": "0",
+            "TotalIncomeOfHP": "0",
+            "TotalIncome": "0",
+            "PerquisitesValue": "0"
+          },
+          "ITR1_TaxComputation": {
+            "TotalTaxPayable": "0",
+            "Rebate87A": "0",
+            "EducationCess": "0",
+            "GrossTaxLiability": "0",
+            "Section89": "0",
+            "NetTaxLiability": "0",
+            "IntrstPay": {
+              "IntrstPayUs234A": "0",
+              "IntrstPayUs234C": "0\r0\r0"
+            },
+            "TotalIntrstPay": "0"
+          },
+          "TaxPaid": {
+            "TaxesPaid": {
+              "TDS": "0\r0\r0\r0",
+              "TotalTaxesPaid": "0"
+            },
+            "BalTaxPayable": "0"
+          },
+          "refund": {
+            "RefundDue": "0",
+            "BankAccountDtls": {
+              "PriBankDetails": {
+                "IFSCCode": "<<IFSC>>",
+                "BankName": "<<BANK_NAME>>",
+                "BankAccountNo": "<<ACCOUNT_NUMBER>>"
+              }
+            }
+          }
+        }
+      },
+      {
+        "2017-18": {
+          "ITR1FORM:ITR1": {
+            "ITRForm:FilingStatus": {
+              "ITRForm:ReturnFileSec": "11",
+              "ITRForm:ReturnType": "O",
+              "ITRForm:ResidentialStatus": "RES",
+              "ITRForm:PortugeseCC5A": "N"
+            },
+            "ITRForm:Verification": {
+              "ITRForm:Declaration": {
+                "ITRForm:AssesseeVerName": "<<FULL_NAME>>",
+                "ITRForm:FatherName": "<<FATHER_NAME>>",
+                "ITRForm:AssesseeVerPAN": "<<PAN_NUMBER>>"
+              },
+              "ITRForm:Place": "<<CITY>>",
+              "ITRForm:Date": "<<ITR_DATE>>"
+            },
+            "ITR1FORM:TaxExmpIntInc": "0",
+            "ITRForm:PersonalInfo": {
+              "ITRForm:AssesseeName": {
+                "ITRForm:FirstName": "<<FIRST_NAME>>",
+                "ITRForm:SurNameOrOrgName": "<<LAST_NAME>>"
+              },
+              "ITRForm:PAN": "<<PAN_NUMBER>>",
+              "ITRForm:Address": {
+                "ITRForm:ResidenceNo": "<<RESIDENCE>>",
+                "ITRForm:LocalityOrArea": "<<AREA>>",
+                "ITRForm:CityOrTownOrDistrict": "<<CITY>>",
+                "ITRForm:StateCode": "<<STATE_CODE>>",
+                "ITRForm:CountryCode": "<<COUNTRY_CODE>>",
+                "ITRForm:PinCode": "<<PIN>>",
+                "ITRForm:MobileNo": "<<PHONE>>",
+                "ITRForm:EmailAddress": "<<EMAIL>>"
+              },
+              "ITRForm:DOB": "<<DOB>>",
+              "ITRForm:EmployerCategory": "NA",
+              "ITRForm:AadhaarCardNo": "<<AADHAAR_NUMBER>>"
+            },
+            "ITRForm:TaxPaid": {
+              "ITRForm:TaxesPaid": {
+                "ITRForm:AdvanceTax": "0",
+                "ITRForm:TDS": "0",
+                "ITRForm:TCS": "0",
+                "ITRForm:SelfAssessmentTax": "0",
+                "ITRForm:TotalTaxesPaid": "0",
+                "ITRForm:ExcIncSec1038": "0",
+                "ITRForm:ExcIncSec1034": "0"
+              },
+              "ITRForm:BalTaxPayable": "0"
+            },
+            "ITRForm:ITR1_IncomeDeductions": {
+              "ITRForm:IncomeFromSal": "0",
+              "ITRForm:TotalIncomeOfHP": "0",
+              "ITRForm:IncomeOthSrc": "0",
+              "ITRForm:GrossTotIncome": "0",
+              "ITRForm:UsrDeductUndChapVIA": {
+                "ITRForm:Section80CCD1B": "0",
+                "ITRForm:Section80CCG": "0",
+                "ITRForm:Section80E": "0",
+                "ITRForm:Section80DD": "0",
+                "ITRForm:Section80GGC": "0",
+                "ITRForm:Section80GGA": "0",
+                "ITRForm:Section80DDB": "0",
+                "ITRForm:Section80C": "0",
+                "ITRForm:Section80EE": "0",
+                "ITRForm:Section80G": "0",
+                "ITRForm:Section80RRB": "0",
+                "ITRForm:Section80CCDEmployer": "0",
+                "ITRForm:Section80CCC": "0",
+                "ITRForm:Section80D": "0",
+                "ITRForm:Section80GG": "0",
+                "ITRForm:Section80CCDEmployeeOrSE": "0",
+                "ITRForm:Section80QQB": "0",
+                "ITRForm:Section80TTA": "0",
+                "ITRForm:TotalChapVIADeductions": "0",
+                "ITRForm:Section80U": "0"
+              },
+              "ITRForm:DeductUndChapVIA": {
+                "ITRForm:Section80CCD1B": "0",
+                "ITRForm:Section80CCG": "0",
+                "ITRForm:Section80E": "0",
+                "ITRForm:Section80DD": "0",
+                "ITRForm:Section80GGC": "0",
+                "ITRForm:Section80GGA": "0",
+                "ITRForm:Section80DDB": "0",
+                "ITRForm:Section80C": "0",
+                "ITRForm:Section80EE": "0",
+                "ITRForm:Section80G": "0",
+                "ITRForm:Section80RRB": "0",
+                "ITRForm:Section80CCDEmployer": "0",
+                "ITRForm:Section80CCC": "0",
+                "ITRForm:Section80D": "0",
+                "ITRForm:Section80GG": "0",
+                "ITRForm:Section80CCDEmployeeOrSE": "0",
+                "ITRForm:Section80QQB": "0",
+                "ITRForm:Section80TTA": "0",
+                "ITRForm:TotalChapVIADeductions": "0",
+                "ITRForm:Section80U": "0"
+              },
+              "ITRForm:TotalIncome": "0"
+            },
+            "ITRForm:ITR1_TaxComputation": {
+              "ITRForm:IntrstPay": {
+                "ITRForm:IntrstPayUs234A": "0",
+                "ITRForm:IntrstPayUs234B": "0",
+                "ITRForm:IntrstPayUs234C": "0"
+              },
+              "ITRForm:TaxPayableOnRebate": "0",
+              "ITRForm:NetTaxLiability": "0",
+              "ITRForm:GrossTaxLiability": "0",
+              "ITRForm:Section89": "0",
+              "ITRForm:TotalTaxPayable": "0",
+              "ITRForm:EducationCess": "0",
+              "ITRForm:TotalIntrstPay": "0",
+              "ITRForm:TotTaxPlusIntrstPay": "0",
+              "ITRForm:Rebate87A": "0"
+            },
+            "ITRForm:Refund": {
+              "ITRForm:RefundDue": "0",
+              "ITRForm:BankAccountDtls": {
+                "ITRForm:BankDtlsFlag": "Y",
+                "ITRForm:PriBankDetails": {
+                  "ITRForm:IFSCCode": "<<IFSC_CODE>>",
+                  "ITRForm:BankName": "<<BANK_NAME>>",
+                  "ITRForm:BankAccountNo": "<<ACCOUNT_NUMBER>>",
+                  "ITRForm:CashDeposited": "<<CASH_DEPOSIT>>"
+                },
+                "ITRForm:AddtnlBankDetails": {
+                  "ITRForm:IFSCCode": "<<IFSC_CODE>>",
+                  "ITRForm:BankName": "<<BANK_NAME>>",
+                  "ITRForm:BankAccountNo": "<<ACCOUNT_NUMBER>>",
+                  "ITRForm:CashDeposited": "0"
+                }
+              }
+            },
+            "ITRForm:CreationInfo": {
+              "ITRForm:SWVersionNo": "1.0",
+              "ITRForm:SWCreatedBy": "SW10001090",
+              "ITRForm:XMLCreatedBy": "SW10001090",
+              "ITRForm:XMLCreationDate": "<<ITR_DATE>>",
+              "ITRForm:IntermediaryCity": "<<IntermediaryCity>>",
+              "ITRForm:Digest": "<<DIGEST>>"
+            },
+            "ITRForm:Form_ITR1": {
+              "ITRForm:FormName": "ITR-1",
+              "ITRForm:Description": "For Indls having Income from Salary, Pension, family pension and Interest",
+              "ITRForm:AssessmentYear": "2017",
+              "ITRForm:SchemaVer": "Ver1.0",
+              "ITRForm:FormVer": "Ver1.0"
+            }
+          }
+        }
+      }
+    ]
+  }
+}
+```
+
+<a name="itrErrorWebhookReqBody"></a>
+
+#### 5.2 FAILURE REQUEST BODY
+
+```json
+{
+  "id": "<<transaction_id>>",
+  "mode": "POPUP",
+  "env": "PRODUCTION",
+  "response_code": "100",
+  "response_message": "Transaction Failed",
+  "phone_number": "<<PHONE>>",
+  "dob": "<<DOB>>",
+  "request_version": "1.0",
+  "pan": "<<PAN_NUMBER>>",
+  "request_medium": "<<web | android | ios>>",
+  "sdk_name": "1",
+  "error": {
+    "code": "<<error_code>>",
+    "message": "<<error_message>>"
+  }
+}
+```
+
+<a name="itrErrorCodeWebhook"></a>
+
+#### 5.3 RESPONSE CODES AND MESSAGES
+
+| Code | Billable | Message                    |
+| ---- | -------- | -------------------------- |
+| 101  | true     | Transaction Successful     |
+| 601  | false    | Unknown Error              |
+| 602  | false    | Unable to download ITR     |
+| 603  | false    | Unable to process response |
+| 604  | false    | Unable to submit the OTP   |
+| 605  | false    | Unable to parse ITR        |
+| 606  | false    | Session expired or invalid |
 
 In case you are facing any issues with integration please open a ticket on our [support portal](https://aadhaarapi.freshdesk.com/support/home)
