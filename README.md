@@ -789,29 +789,29 @@ The webhook response will be sent to `webhook_url` provided at the init call. Yo
 ```
 
 <a name="bsaErrorCodeWebhook"></a>
+
 #### 5.3 RESPONSE CODES AND MESSAGES
 
-| Code | Billable | Message                            |
-| ---- | -------- | ---------------------------------- |
-| 101  | true     | Transaction Success                |
-| 99   | false    | Unknown Error                      |
-| 651  | false    | Technical Error                    |
-| 652  | false    | Session Closed                     |
-| 653  | false    | Bank Server Unresponsive Error     |
-| 654  | false    | Consent Denied Error               |
-| 655  | false    | Document Parsing Error             |
-| 656  | false    | Validity Expiry Error              |
-| 657  | false    | Authentication Error               |
-| 658  | false    | No Entry Found Error               |
-| 659  | false    | Stage Timeout Error                |
-| 660  | false    | Session Closed On Retry            |
-| 661  | false    | Login Attempts Exceeded Error,     |
-| 662  | false    | Captcha Attempts Exceeded Error,   |
-| 663  | false    | OTP Attempts Exceeded Error,       |
-| 664  | false    | Answer-Attempts Exceeded Error,    |
-| 670  | false    | No Session Found Error             |
-| 671  | false    | Error Not Recorded                 |
-
+| Code | Billable | Message                          |
+| ---- | -------- | -------------------------------- |
+| 101  | true     | Transaction Success              |
+| 99   | false    | Unknown Error                    |
+| 651  | false    | Technical Error                  |
+| 652  | false    | Session Closed                   |
+| 653  | false    | Bank Server Unresponsive Error   |
+| 654  | false    | Consent Denied Error             |
+| 655  | false    | Document Parsing Error           |
+| 656  | false    | Validity Expiry Error            |
+| 657  | false    | Authentication Error             |
+| 658  | false    | No Entry Found Error             |
+| 659  | false    | Stage Timeout Error              |
+| 660  | false    | Session Closed On Retry          |
+| 661  | false    | Login Attempts Exceeded Error,   |
+| 662  | false    | Captcha Attempts Exceeded Error, |
+| 663  | false    | OTP Attempts Exceeded Error,     |
+| 664  | false    | Answer-Attempts Exceeded Error,  |
+| 670  | false    | No Session Found Error           |
+| 671  | false    | Error Not Recorded               |
 
 <a name="bsaStage"></a>
 
@@ -1086,7 +1086,7 @@ The `payload` has `id`, `response_code`, and `response_message` properties.
 | 603           | Unable to process response |
 | 604           | Unable to submit the OTP   |
 | 605           | Unable to parse ITR        |
-| 606           | Session expired or invalid |
+| 606           | Session expired or invalid |  |
 
 ```json
 {
@@ -1095,6 +1095,27 @@ The `payload` has `id`, `response_code`, and `response_message` properties.
     "id": "<<transaction_id>>",
     "response_code": "602",
     "response_message": "Unable to download ITR"
+  }
+}
+```
+
+#### 4.2.3 Event: `itr-consent-denied`
+
+This event is fired when user explicitly closed the an going transaction. The respective callback is called and `message` parameter is passed. The `message` is an object with `action` and `payload` property on it.
+
+The `payload` has `id`, `response_code`, and `response_message` properties.
+
+| response_code | response_message |
+| ------------- | ---------------- |
+| 609           | Consent Denied   |
+
+```json
+{
+  "action": "itr-error",
+  "payload": {
+    "id": "<<transaction_id>>",
+    "response_code": "609",
+    "response_message": "Consent Denied"
   }
 }
 ```
@@ -1324,5 +1345,6 @@ The webhook response will be sent to `webhook_url` provided at the init call. Wh
 | 604  | false    | Unable to submit the OTP   |
 | 605  | false    | Unable to parse ITR        |
 | 606  | false    | Session expired or invalid |
+| 609  | false    | Consent Denied             |
 
 In case you are facing any issues with integration please open a ticket on our [support portal](https://aadhaarapi.freshdesk.com/support/home)
