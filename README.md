@@ -1101,7 +1101,7 @@ The `payload` has `id`, `response_code`, and `response_message` properties.
 
 #### 4.2.3 Event: `itr-consent-denied`
 
-This event is fired when user explicitly closed the an going transaction. The respective callback is called and `message` parameter is passed. The `message` is an object with `action` and `payload` property on it.
+This event is fired when user don't want to agree going ahead with the transaction and explicitly _Deny_ the transaction in the gateway. The respective callback is called and `message` parameter is passed. The `message` is an object with `action` and `payload` property on it.
 
 The `payload` has `id`, `response_code`, and `response_message` properties.
 
@@ -1111,11 +1111,32 @@ The `payload` has `id`, `response_code`, and `response_message` properties.
 
 ```json
 {
-  "action": "itr-error",
+  "action": "itr-consent-denied",
   "payload": {
     "id": "<<transaction_id>>",
     "response_code": "609",
     "response_message": "Consent Denied"
+  }
+}
+```
+
+#### 4.2.3 Event: `itr-gateway-terminated`
+
+This event is fired when user explicitly closed the an going transaction. The respective callback is called and `message` parameter is passed. The `message` is an object with `action` and `payload` property on it.
+
+The `payload` has `id`, `response_code`, and `response_message` properties.
+
+| response_code | response_message   |
+| ------------- | ------------------ |
+| 610           | Gateway Terminated |
+
+```json
+{
+  "action": "itr-gateway-terminated",
+  "payload": {
+    "id": "<<transaction_id>>",
+    "response_code": "610",
+    "response_message": "Gateway Terminated"
   }
 }
 ```
@@ -1346,5 +1367,7 @@ The webhook response will be sent to `webhook_url` provided at the init call. Wh
 | 605  | false    | Unable to parse ITR        |
 | 606  | false    | Session expired or invalid |
 | 609  | false    | Consent Denied             |
+| 610  | false    | Gateway Terminated         |
+| 611  | false    | Service unavailable        |
 
 In case you are facing any issues with integration please open a ticket on our [support portal](https://aadhaarapi.freshdesk.com/support/home)
