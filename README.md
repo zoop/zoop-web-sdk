@@ -1086,7 +1086,8 @@ The `payload` has `id`, `response_code`, and `response_message` properties.
 | 603           | Unable to process response |
 | 604           | Unable to submit the OTP   |
 | 605           | Unable to parse ITR        |
-| 606           | Session expired or invalid |  |
+| 606           | Session expired or invalid |
+| 611           | Service unavailable        |
 
 ```json
 {
