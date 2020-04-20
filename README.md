@@ -789,29 +789,29 @@ The webhook response will be sent to `webhook_url` provided at the init call. Yo
 ```
 
 <a name="bsaErrorCodeWebhook"></a>
+
 #### 5.3 RESPONSE CODES AND MESSAGES
 
-| Code | Billable | Message                            |
-| ---- | -------- | ---------------------------------- |
-| 101  | true     | Transaction Success                |
-| 99   | false    | Unknown Error                      |
-| 651  | false    | Technical Error                    |
-| 652  | false    | Session Closed                     |
-| 653  | false    | Bank Server Unresponsive Error     |
-| 654  | false    | Consent Denied Error               |
-| 655  | false    | Document Parsing Error             |
-| 656  | false    | Validity Expiry Error              |
-| 657  | false    | Authentication Error               |
-| 658  | false    | No Entry Found Error               |
-| 659  | false    | Stage Timeout Error                |
-| 660  | false    | Session Closed On Retry            |
-| 661  | false    | Login Attempts Exceeded Error,     |
-| 662  | false    | Captcha Attempts Exceeded Error,   |
-| 663  | false    | OTP Attempts Exceeded Error,       |
-| 664  | false    | Answer-Attempts Exceeded Error,    |
-| 670  | false    | No Session Found Error             |
-| 671  | false    | Error Not Recorded                 |
-
+| Code | Billable | Message                          |
+| ---- | -------- | -------------------------------- |
+| 101  | true     | Transaction Success              |
+| 99   | false    | Unknown Error                    |
+| 651  | false    | Technical Error                  |
+| 652  | false    | Session Closed                   |
+| 653  | false    | Bank Server Unresponsive Error   |
+| 654  | false    | Consent Denied Error             |
+| 655  | false    | Document Parsing Error           |
+| 656  | false    | Validity Expiry Error            |
+| 657  | false    | Authentication Error             |
+| 658  | false    | No Entry Found Error             |
+| 659  | false    | Stage Timeout Error              |
+| 660  | false    | Session Closed On Retry          |
+| 661  | false    | Login Attempts Exceeded Error,   |
+| 662  | false    | Captcha Attempts Exceeded Error, |
+| 663  | false    | OTP Attempts Exceeded Error,     |
+| 664  | false    | Answer-Attempts Exceeded Error,  |
+| 670  | false    | No Session Found Error           |
+| 671  | false    | Error Not Recorded               |
 
 <a name="bsaStage"></a>
 
@@ -827,15 +827,15 @@ After creating an initialization request successfully you can check at which sta
 
 ```json
 {
-    "id": "<<transaction_id>>",
-    "mode": "REDIRECT",
-    "env": "PRODUCTION",
-    "request_version": "1.0",
-    "response_code": "101",
-    "response_message": "Transaction Successful",
-    "bank": "SBI",
-    "last_user_stage": "login_opened",
-    "last_user_stage_code": "LO"
+  "id": "<<transaction_id>>",
+  "mode": "REDIRECT",
+  "env": "PRODUCTION",
+  "request_version": "1.0",
+  "response_code": "101",
+  "response_message": "Transaction Successful",
+  "bank": "SBI",
+  "last_user_stage": "login_opened",
+  "last_user_stage_code": "LO"
 }
 ```
 
@@ -1087,6 +1087,7 @@ The `payload` has `id`, `response_code`, and `response_message` properties.
 | 604           | Unable to submit the OTP   |
 | 605           | Unable to parse ITR        |
 | 606           | Session expired or invalid |
+| 611           | Service unavailable        |
 
 ```json
 {
@@ -1095,6 +1096,48 @@ The `payload` has `id`, `response_code`, and `response_message` properties.
     "id": "<<transaction_id>>",
     "response_code": "602",
     "response_message": "Unable to download ITR"
+  }
+}
+```
+
+#### 4.2.3 Event: `itr-consent-denied`
+
+This event is fired when user don't want to agree going ahead with the transaction and explicitly _Deny_ the transaction in the gateway. The respective callback is called and `message` parameter is passed. The `message` is an object with `action` and `payload` property on it.
+
+The `payload` has `id`, `response_code`, and `response_message` properties.
+
+| response_code | response_message |
+| ------------- | ---------------- |
+| 609           | Consent Denied   |
+
+```json
+{
+  "action": "itr-consent-denied",
+  "payload": {
+    "id": "<<transaction_id>>",
+    "response_code": "609",
+    "response_message": "Consent Denied"
+  }
+}
+```
+
+#### 4.2.3 Event: `itr-gateway-terminated`
+
+This event is fired when user explicitly closed the an going transaction. The respective callback is called and `message` parameter is passed. The `message` is an object with `action` and `payload` property on it.
+
+The `payload` has `id`, `response_code`, and `response_message` properties.
+
+| response_code | response_message   |
+| ------------- | ------------------ |
+| 610           | Gateway Terminated |
+
+```json
+{
+  "action": "itr-gateway-terminated",
+  "payload": {
+    "id": "<<transaction_id>>",
+    "response_code": "610",
+    "response_message": "Gateway Terminated"
   }
 }
 ```
@@ -1127,32 +1170,32 @@ The webhook response will be sent to `webhook_url` provided at the init call. Wh
       {
         "2019-20": {
           "PersonalInfo": {
-            "Name": "<<NAME>>",
-            "PAN": "<<PAN_NUMBER>>",
-            "DOB": "<<DATE_OF_BIRTH>>",
             "Address": {
-              "ResidenceName": "",
-              "LocalityOrArea": "<<AREA>>",
-              "RoadOrStreet": "",
-              "ResidenceNo": "<<RESIDENCE_NO>>",
-              "PinCode": "<<PIN>>",
-              "CityOrTownOrDistrict": "<<CITY_OR_TOWN>>",
-              "MobileNo": "91 - <<PHONE>>",
-              "State": "<<STATE>>",
-              "EmailAddress": "<<EMAIL>>"
+              "PinCode": "453009",
+              "ResidenceNo": "Vikasnagar  West Part R.No.3",
+              "CityOrTownOrDistrict": "Indore",
+              "State": "Madhya pradesh",
+              "MobileNo": "8765476856",
+              "EmailAddress": "abc@gmail.com",
+              "LocalityOrArea": "Tehri Garhwal"
             },
-            "AadhaarCardNo": "<<AADHAAR_NUMBER>>",
-            "EmployerCategory": "Not Applicable(eg. Family pension etc)"
+            "AadhaarCardNo": "1123457684302546",
+            "PAN": "BFZPT11897",
+            "DOB": "04/04/1982",
+            "Name": "Rahul  Gupta",
+            "EmployerCategory": "Not Applicable"
           },
           "ITR1_IncomeDeductions": {
             "ProfitsInSalary": "0",
-            "Salary": "<<SALARY>>",
+            "Salary": "10000",
             "AlwnsNotExempt": "0",
-            "IncomeFromSal": "<<SALARY>>",
+            "IncomeFromSal": "10000",
+            "DeductionUs16": "10000",
             "UsrDeductUndChapVIA": {
-              "Section80DD": "0\r0",
+              "Section80DD": "0",
               "TotalChapVIADeductions": "0",
               "Section80GGA": "0",
+              "Section80DDB": "0",
               "Section80CCG": "0",
               "Section80GG": "0",
               "Section80CCDEmployer": "0",
@@ -1160,13 +1203,16 @@ The webhook response will be sent to `webhook_url` provided at the init call. Wh
               "Section80GGC": "0",
               "Section80TTA": "0",
               "Section80DHealthInsPremium": {
-                "Sec80DHealthInsurancePremiumUsr": "0\r0\r0"
+                "Sec80DHealthInsurancePremiumUsr": "0",
+                "Sec80DMedicalExpenditureUsr": "0",
+                "Sec80DPreventiveHealthCheckUpUsr": "0"
               },
               "Section80CCDEmployeeOrSE": "0",
               "Section80E": "0",
               "Section80C": "0",
               "Section80CCC": "0",
-              "Section80EE": "0"
+              "Section80EE": "0",
+              "Section80U": "0"
             },
             "IncomeOthSrc": "0",
             "GrossTotIncome": "0",
@@ -1175,188 +1221,107 @@ The webhook response will be sent to `webhook_url` provided at the init call. Wh
             "PerquisitesValue": "0"
           },
           "ITR1_TaxComputation": {
-            "TotalTaxPayable": "0",
-            "Rebate87A": "0",
-            "EducationCess": "0",
-            "GrossTaxLiability": "0",
+            "TotalIntrstPay": "0",
             "Section89": "0",
             "NetTaxLiability": "0",
+            "Rebate87A": "0",
+            "GrossTaxLiability": "0",
+            "TotalTaxPayable": "0",
+            "TotTaxPlusIntrstPay": "0",
+            "TaxPayableOnRebate": "0",
+            "EducationCess": "0",
             "IntrstPay": {
               "IntrstPayUs234A": "0",
-              "IntrstPayUs234C": "0\r0\r0"
-            },
-            "TotalIntrstPay": "0"
+              "IntrstPayUs234B": "0",
+              "IntrstPayUs234C": "0"
+            }
           },
           "TaxPaid": {
             "TaxesPaid": {
-              "TDS": "0\r0\r0\r0",
+              "AdvanceTax": "0",
+              "SelfAssessmentTax": "0",
+              "TDS": "0",
+              "TCS": "0",
               "TotalTaxesPaid": "0"
             },
             "BalTaxPayable": "0"
           },
           "refund": {
-            "RefundDue": "0",
             "BankAccountDtls": {
               "PriBankDetails": {
-                "IFSCCode": "<<IFSC>>",
-                "BankName": "<<BANK_NAME>>",
-                "BankAccountNo": "<<ACCOUNT_NUMBER>>"
+                "IFSCCode": "SBIN0000454",
+                "BankName": "SBI",
+                "BankAccountNo": "931815897678"
               }
-            }
+            },
+            "RefundDue": "0"
           }
-        }
-      },
-      {
+        },
         "2017-18": {
-          "ITR1FORM:ITR1": {
-            "ITRForm:FilingStatus": {
-              "ITRForm:ReturnFileSec": "11",
-              "ITRForm:ReturnType": "O",
-              "ITRForm:ResidentialStatus": "RES",
-              "ITRForm:PortugeseCC5A": "N"
+          "PersonalInfo": {
+            "Address": {
+              "ResidenceNo": "Vikasnagar  West Part R.No.3",
+              "LocalityOrArea": "Tehri Garhwal",
+              "MobileNo": "8765476856",
+              "EmailAddress": "abc@gmail.com",
+              "CityOrTownOrDistrict": "Indore",
+              "State": "Madhya pradesh",
+              "PinCode": "453009"
             },
-            "ITRForm:Verification": {
-              "ITRForm:Declaration": {
-                "ITRForm:AssesseeVerName": "<<FULL_NAME>>",
-                "ITRForm:FatherName": "<<FATHER_NAME>>",
-                "ITRForm:AssesseeVerPAN": "<<PAN_NUMBER>>"
-              },
-              "ITRForm:Place": "<<CITY>>",
-              "ITRForm:Date": "<<ITR_DATE>>"
+            "EmployerCategory": "Not Applicable",
+            "Status": "RES - Resident",
+            "AadhaarCardNo": "1123457684302546",
+            "PAN": "BFZPT11897",
+            "DOB": "04/04/1982",
+            "Name": "Rahul Gupta"
+          },
+          "ITR1_IncomeDeductions": {
+            "UsrDeductUndChapVIA": {
+              "TotalChapVIADeductions": "0",
+              "Section80GGA": "0",
+              "Section80DDB": "0",
+              "Section80CCG": "0",
+              "Section80CCDEmployer": "0",
+              "Section80QQB": "0",
+              "Section80GGC": "0",
+              "Section80RRB": "0",
+              "Section80TTA": "0",
+              "Section80CCC": "0",
+              "Section80EE": "0"
             },
-            "ITR1FORM:TaxExmpIntInc": "0",
-            "ITRForm:PersonalInfo": {
-              "ITRForm:AssesseeName": {
-                "ITRForm:FirstName": "<<FIRST_NAME>>",
-                "ITRForm:SurNameOrOrgName": "<<LAST_NAME>>"
-              },
-              "ITRForm:PAN": "<<PAN_NUMBER>>",
-              "ITRForm:Address": {
-                "ITRForm:ResidenceNo": "<<RESIDENCE>>",
-                "ITRForm:LocalityOrArea": "<<AREA>>",
-                "ITRForm:CityOrTownOrDistrict": "<<CITY>>",
-                "ITRForm:StateCode": "<<STATE_CODE>>",
-                "ITRForm:CountryCode": "<<COUNTRY_CODE>>",
-                "ITRForm:PinCode": "<<PIN>>",
-                "ITRForm:MobileNo": "<<PHONE>>",
-                "ITRForm:EmailAddress": "<<EMAIL>>"
-              },
-              "ITRForm:DOB": "<<DOB>>",
-              "ITRForm:EmployerCategory": "NA",
-              "ITRForm:AadhaarCardNo": "<<AADHAAR_NUMBER>>"
+            "TotalIncome": "0"
+          },
+          "ITR1_TaxComputation": {
+            "NetTaxLiability": "0",
+            "IntrstPay": {
+              "IntrstPayUs234A": "0",
+              "IntrstPayUs234B": "0",
+              "IntrstPayUs234C": "0"
             },
-            "ITRForm:TaxPaid": {
-              "ITRForm:TaxesPaid": {
-                "ITRForm:AdvanceTax": "0",
-                "ITRForm:TDS": "0",
-                "ITRForm:TCS": "0",
-                "ITRForm:SelfAssessmentTax": "0",
-                "ITRForm:TotalTaxesPaid": "0",
-                "ITRForm:ExcIncSec1038": "0",
-                "ITRForm:ExcIncSec1034": "0"
-              },
-              "ITRForm:BalTaxPayable": "0"
+            "GrossTaxLiability": "0",
+            "Rebate87A": "0",
+            "TaxPayableOnRebate": "0",
+            "TotalTaxPayable": "0",
+            "Section89": "0"
+          },
+          "TaxPaid": {
+            "TaxesPaid": {
+              "AdvanceTax": "0",
+              "TCS": "0",
+              "TotalTaxesPaid": "0",
+              "SelfAssessmentTax": "0",
+              "TDS": "0"
             },
-            "ITRForm:ITR1_IncomeDeductions": {
-              "ITRForm:IncomeFromSal": "0",
-              "ITRForm:TotalIncomeOfHP": "0",
-              "ITRForm:IncomeOthSrc": "0",
-              "ITRForm:GrossTotIncome": "0",
-              "ITRForm:UsrDeductUndChapVIA": {
-                "ITRForm:Section80CCD1B": "0",
-                "ITRForm:Section80CCG": "0",
-                "ITRForm:Section80E": "0",
-                "ITRForm:Section80DD": "0",
-                "ITRForm:Section80GGC": "0",
-                "ITRForm:Section80GGA": "0",
-                "ITRForm:Section80DDB": "0",
-                "ITRForm:Section80C": "0",
-                "ITRForm:Section80EE": "0",
-                "ITRForm:Section80G": "0",
-                "ITRForm:Section80RRB": "0",
-                "ITRForm:Section80CCDEmployer": "0",
-                "ITRForm:Section80CCC": "0",
-                "ITRForm:Section80D": "0",
-                "ITRForm:Section80GG": "0",
-                "ITRForm:Section80CCDEmployeeOrSE": "0",
-                "ITRForm:Section80QQB": "0",
-                "ITRForm:Section80TTA": "0",
-                "ITRForm:TotalChapVIADeductions": "0",
-                "ITRForm:Section80U": "0"
-              },
-              "ITRForm:DeductUndChapVIA": {
-                "ITRForm:Section80CCD1B": "0",
-                "ITRForm:Section80CCG": "0",
-                "ITRForm:Section80E": "0",
-                "ITRForm:Section80DD": "0",
-                "ITRForm:Section80GGC": "0",
-                "ITRForm:Section80GGA": "0",
-                "ITRForm:Section80DDB": "0",
-                "ITRForm:Section80C": "0",
-                "ITRForm:Section80EE": "0",
-                "ITRForm:Section80G": "0",
-                "ITRForm:Section80RRB": "0",
-                "ITRForm:Section80CCDEmployer": "0",
-                "ITRForm:Section80CCC": "0",
-                "ITRForm:Section80D": "0",
-                "ITRForm:Section80GG": "0",
-                "ITRForm:Section80CCDEmployeeOrSE": "0",
-                "ITRForm:Section80QQB": "0",
-                "ITRForm:Section80TTA": "0",
-                "ITRForm:TotalChapVIADeductions": "0",
-                "ITRForm:Section80U": "0"
-              },
-              "ITRForm:TotalIncome": "0"
-            },
-            "ITRForm:ITR1_TaxComputation": {
-              "ITRForm:IntrstPay": {
-                "ITRForm:IntrstPayUs234A": "0",
-                "ITRForm:IntrstPayUs234B": "0",
-                "ITRForm:IntrstPayUs234C": "0"
-              },
-              "ITRForm:TaxPayableOnRebate": "0",
-              "ITRForm:NetTaxLiability": "0",
-              "ITRForm:GrossTaxLiability": "0",
-              "ITRForm:Section89": "0",
-              "ITRForm:TotalTaxPayable": "0",
-              "ITRForm:EducationCess": "0",
-              "ITRForm:TotalIntrstPay": "0",
-              "ITRForm:TotTaxPlusIntrstPay": "0",
-              "ITRForm:Rebate87A": "0"
-            },
-            "ITRForm:Refund": {
-              "ITRForm:RefundDue": "0",
-              "ITRForm:BankAccountDtls": {
-                "ITRForm:BankDtlsFlag": "Y",
-                "ITRForm:PriBankDetails": {
-                  "ITRForm:IFSCCode": "<<IFSC_CODE>>",
-                  "ITRForm:BankName": "<<BANK_NAME>>",
-                  "ITRForm:BankAccountNo": "<<ACCOUNT_NUMBER>>",
-                  "ITRForm:CashDeposited": "<<CASH_DEPOSIT>>"
-                },
-                "ITRForm:AddtnlBankDetails": {
-                  "ITRForm:IFSCCode": "<<IFSC_CODE>>",
-                  "ITRForm:BankName": "<<BANK_NAME>>",
-                  "ITRForm:BankAccountNo": "<<ACCOUNT_NUMBER>>",
-                  "ITRForm:CashDeposited": "0"
-                }
+            "BalTaxPayable": "0"
+          },
+          "refund": {
+            "BankAccountDtls": {
+              "PriBankDetails": {
+                "IFSCCode": "YESB0000008",
+                "BankName": "YESBANK"
               }
             },
-            "ITRForm:CreationInfo": {
-              "ITRForm:SWVersionNo": "1.0",
-              "ITRForm:SWCreatedBy": "SW10001090",
-              "ITRForm:XMLCreatedBy": "SW10001090",
-              "ITRForm:XMLCreationDate": "<<ITR_DATE>>",
-              "ITRForm:IntermediaryCity": "<<IntermediaryCity>>",
-              "ITRForm:Digest": "<<DIGEST>>"
-            },
-            "ITRForm:Form_ITR1": {
-              "ITRForm:FormName": "ITR-1",
-              "ITRForm:Description": "For Indls having Income from Salary, Pension, family pension and Interest",
-              "ITRForm:AssessmentYear": "2017",
-              "ITRForm:SchemaVer": "Ver1.0",
-              "ITRForm:FormVer": "Ver1.0"
-            }
+            "RefundDue": "0"
           }
         }
       }
@@ -1402,5 +1367,8 @@ The webhook response will be sent to `webhook_url` provided at the init call. Wh
 | 604  | false    | Unable to submit the OTP   |
 | 605  | false    | Unable to parse ITR        |
 | 606  | false    | Session expired or invalid |
+| 609  | false    | Consent Denied             |
+| 610  | false    | Gateway Terminated         |
+| 611  | false    | Service unavailable        |
 
 In case you are facing any issues with integration please open a ticket on our [support portal](https://aadhaarapi.freshdesk.com/support/home)
