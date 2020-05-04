@@ -1016,6 +1016,14 @@ You can download or add the link to the CDN of our Web SDK. There are two functi
         // If any error happen then this errorCode will be passed to the user
         console.log(message);
       });
+      // The below event fires when user denies the consent of moving the transaction forward
+      zoop.on("itr-consent-denied", (message) => {
+        console.log(message);
+      });
+      // The below event fires when user deliberately closed the ongoing transaction
+      zoop.on("itr-gateway-terminated", (message) => {
+        console.log(message);
+      });
       // Name of the this function can be anything you want.
       function openGateway() {
         // Pass gateway option to modify UI here.
