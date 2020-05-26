@@ -726,6 +726,7 @@ The webhook response will be sent to `webhook_url` provided at the init call. Yo
   "request_version": "1.0",
   "request_medium": "<<web | android | ios>>",
   "sdk_name": "1",
+  "report_url": "https://url-for/file.xlsx",
   "data": {
     "metadata": {
       "acc_number": "<<account_number>>",
