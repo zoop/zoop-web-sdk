@@ -266,7 +266,9 @@ const gatewayOptions = {
   iris_allowed: "n", //(optional) default value 'y',
   phone_auth: "n", //(optional) default value 'n',
   draggable_sign: "y", //(optional) default value ‘n’,
-  google_sign: "n" //(optional) default value ‘y’
+  google_sign: "n", //(optional) default value ‘y’
+  customer_email: "name@example.com", // (optional) email id to prefill
+  customer_phone: "9999999999", // (optional) phone number to prefill
 };
 ```
 
