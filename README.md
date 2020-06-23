@@ -208,9 +208,9 @@ The above generated gateway transactionId has to be made available to frontend t
 
 <a name="setZoopEnv"></a>
 
-### 5. Set Zoop Environment
+### 5. Set Zoop Environment (mandatory for staging environment)
 
-First, you might have to specify the environment in which you want the SDK to run. By default, **staging** environment is picked if you forgot to specify any value. Valid environments are **production** and **staging**. To set the environment you call `setEnvironment` method from the provided SDK. This helps us to understand what type of transactions you are planning of doing.
+First, you might have to specify the environment in which you want the SDK to run. By default, **production** environment is picked if you forgot to specify any value. Valid environments are **production** and **staging**. To set the environment you call `setEnvironment` method from the provided SDK. This helps us to understand what type of transactions you are planning of doing.
 
 ```html
 <script>
