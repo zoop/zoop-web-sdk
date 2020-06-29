@@ -1000,7 +1000,11 @@ You can download or add the link to the CDN of our Web SDK. There are two functi
     <title>Your Site</title>
   </head>
   <body>
-    <script src="https://static.aadhaarapi.com/sdk/v1.0.1/aadhaarapi-web-sdk.min.js"></script>
+    <script src="https://raw.githubusercontent.com/zoop/zoop-web-sdk/master/zoop-sdk.min.js"></script>
+    <button onclick="openGateway()">Open ITR</button>
+    <div id="zoop-gateway-model">
+        <div id="zoop-model-content" style="height: 500px;"></div>
+    </div>
     <script type="application/javascript">
       const gatewayOption = {
         txt_color: "rgb(102,102,102)",
