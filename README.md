@@ -1170,178 +1170,115 @@ The webhook response will be sent to `webhook_url` provided at the init call. Wh
 
 ```json
 {
-  "id": "<<transaction_id>>",
-  "mode": "POPUP",
-  "env": "PRODUCTION",
-  "response_code": "101",
-  "response_message": "Transaction Successful",
-  "phone_number": "<<PHONE>>",
-  "dob": "<<DOB>>",
-  "request_version": "1.0",
-  "pan": "ABCDE1234F",
-  "request_medium": "<<web | android | ios>>",
-  "sdk_name": "1",
-  "data": {
-    "transactions": [
-      {
-        "2019-20": {
-          "PersonalInfo": {
-            "Address": {
-              "PinCode": "453009",
-              "ResidenceNo": "Vikasnagar  West Part R.No.3",
-              "CityOrTownOrDistrict": "Indore",
-              "State": "Madhya pradesh",
-              "MobileNo": "8765476856",
-              "EmailAddress": "abc@gmail.com",
-              "LocalityOrArea": "Tehri Garhwal"
-            },
-            "AadhaarCardNo": "**** **** 1234",
-            "PAN": "ABCDE1234F",
-            "DOB": "04/04/1982",
-            "Name": "Rahul  Gupta",
-            "EmployerCategory": "Not Applicable"
-          },
-          "ITR1_IncomeDeductions": {
-            "ProfitsInSalary": "0",
-            "Salary": "10000",
-            "AlwnsNotExempt": "0",
-            "IncomeFromSal": "10000",
-            "DeductionUs16": "10000",
-            "UsrDeductUndChapVIA": {
-              "Section80DD": "0",
-              "TotalChapVIADeductions": "0",
-              "Section80GGA": "0",
-              "Section80DDB": "0",
-              "Section80CCG": "0",
-              "Section80GG": "0",
-              "Section80CCDEmployer": "0",
-              "Section80CCD1B": "0",
-              "Section80GGC": "0",
-              "Section80TTA": "0",
-              "Section80DHealthInsPremium": {
-                "Sec80DHealthInsurancePremiumUsr": "0",
-                "Sec80DMedicalExpenditureUsr": "0",
-                "Sec80DPreventiveHealthCheckUpUsr": "0"
-              },
-              "Section80CCDEmployeeOrSE": "0",
-              "Section80E": "0",
-              "Section80C": "0",
-              "Section80CCC": "0",
-              "Section80EE": "0",
-              "Section80U": "0"
-            },
-            "IncomeOthSrc": "0",
-            "GrossTotIncome": "0",
-            "TotalIncomeOfHP": "0",
-            "TotalIncome": "0",
-            "PerquisitesValue": "0"
-          },
-          "ITR1_TaxComputation": {
-            "TotalIntrstPay": "0",
-            "Section89": "0",
-            "NetTaxLiability": "0",
-            "Rebate87A": "0",
-            "GrossTaxLiability": "0",
-            "TotalTaxPayable": "0",
-            "TotTaxPlusIntrstPay": "0",
-            "TaxPayableOnRebate": "0",
-            "EducationCess": "0",
-            "IntrstPay": {
-              "IntrstPayUs234A": "0",
-              "IntrstPayUs234B": "0",
-              "IntrstPayUs234C": "0"
-            }
-          },
-          "TaxPaid": {
-            "TaxesPaid": {
-              "AdvanceTax": "0",
-              "SelfAssessmentTax": "0",
-              "TDS": "0",
-              "TCS": "0",
-              "TotalTaxesPaid": "0"
-            },
-            "BalTaxPayable": "0"
-          },
-          "refund": {
-            "BankAccountDtls": {
-              "PriBankDetails": {
-                "IFSCCode": "SBIN0000454",
-                "BankName": "SBI",
-                "BankAccountNo": "931815897678"
-              }
-            },
-            "RefundDue": "0"
-          }
-        },
-        "2017-18": {
-          "PersonalInfo": {
-            "Address": {
-              "ResidenceNo": "Vikasnagar  West Part R.No.3",
-              "LocalityOrArea": "Tehri Garhwal",
-              "MobileNo": "8765476856",
-              "EmailAddress": "abc@gmail.com",
-              "CityOrTownOrDistrict": "Indore",
-              "State": "Madhya pradesh",
-              "PinCode": "453009"
-            },
-            "EmployerCategory": "Not Applicable",
-            "Status": "RES - Resident",
-            "AadhaarCardNo": "**** **** 1234",
-            "PAN": "ABCDE1234F",
-            "DOB": "04/04/1982",
-            "Name": "Rahul Gupta"
-          },
-          "ITR1_IncomeDeductions": {
-            "UsrDeductUndChapVIA": {
-              "TotalChapVIADeductions": "0",
-              "Section80GGA": "0",
-              "Section80DDB": "0",
-              "Section80CCG": "0",
-              "Section80CCDEmployer": "0",
-              "Section80QQB": "0",
-              "Section80GGC": "0",
-              "Section80RRB": "0",
-              "Section80TTA": "0",
-              "Section80CCC": "0",
-              "Section80EE": "0"
-            },
-            "TotalIncome": "0"
-          },
-          "ITR1_TaxComputation": {
-            "NetTaxLiability": "0",
-            "IntrstPay": {
-              "IntrstPayUs234A": "0",
-              "IntrstPayUs234B": "0",
-              "IntrstPayUs234C": "0"
-            },
-            "GrossTaxLiability": "0",
-            "Rebate87A": "0",
-            "TaxPayableOnRebate": "0",
-            "TotalTaxPayable": "0",
-            "Section89": "0"
-          },
-          "TaxPaid": {
-            "TaxesPaid": {
-              "AdvanceTax": "0",
-              "TCS": "0",
-              "TotalTaxesPaid": "0",
-              "SelfAssessmentTax": "0",
-              "TDS": "0"
-            },
-            "BalTaxPayable": "0"
-          },
-          "refund": {
-            "BankAccountDtls": {
-              "PriBankDetails": {
-                "IFSCCode": "YESB0000008",
-                "BankName": "YESBANK"
-              }
-            },
-            "RefundDue": "0"
-          }
-        }
+  "PersonalInfo": {
+    "Name": " String ",
+    "Father Name": "Sanjay Bansal",
+    "AssesseeName": {
+      "FirstName": " Rajat ",
+      "MiddleName": " ",
+      "LastName": " Bansal "
+    },
+    "PAN": " ABCDE1234F ",
+    "DOB": "25-10-1992",
+    "Status": "Active",
+    "AadhaarCardNo": "**** **** 9876",
+    "EmployerCategory": " Government/Public sector undertaking/Pensioners/Others ",
+    "Address": {
+      "ResidenceNo": " H.NO 89 DWARKA NAGAR COACH FACTORY",
+      "ResidenceName": "Rajat Bansal",
+      "RoadOrStreet": "Old post office",
+      "LocalityOrArea": " DWARKA NGAR",
+      "CityOrTownOrDistrict": " BHOPAL",
+      "State": " MADHYA PRADESH",
+      "PinCode": " 462010",
+      "MobileNo": "9999999999",
+      "EmailAddress": " abc@gmail.com ",
+      "Country": "India"
+    }
+  },
+  "ITR1_IncomeDeductions": {
+    "Salary": " Integer ",
+    "IncomeFromSal": " 452000",
+    "AlwnsNotExempt": " 0 ",
+    "PerquisitesValue": " 0 ",
+    "ProfitsInSalary": " 0 ",
+    "DeductionUs16": " 40000 ",
+    "TotalIncomeOfHP": " 0 ",
+    "IncomeOthSrc": " 0 ",
+    "GrossTotIncome": " 412000",
+    "TotalIncome": " 0 ",
+    "UsrDeductUndChapVIA": {
+      "Section80C": " 0 ",
+      "Section80CCC": " 0 ",
+      "Section80CCDEmployeeOrSE": " 0 ",
+      "Section80CCD1B": " 0 ",
+      "Section80CCDEmployer": " 0 ",
+      "Section80CCG": " 0 ",
+      "Section80DD": " 0 ",
+      "Section80DDB": " 0 ",
+      "Section80E": " 195000 ",
+      "Section80EE": " 0 ",
+      "Section80G": " 0 ",
+      "Section80GG": " 30000 ",
+      "Section80GGA": " 0 ",
+      "Section80GGC": " 0 ",
+      "Section80RRB": " 0 ",
+      "Section80QQB": " 0 ",
+      "Section80TTA": " 0 ",
+      "Section80U": " 0 ",
+      "TotalChapVIADeductions": " 225000",
+      "TotalIncome": " 187000 ",
+      "Section80DHealthInsPremium": {
+        "Sec80DHealthInsurancePremiumUsr": " 0 ",
+        "Sec80DMedicalExpenditureUsr": " 0 ",
+        "Sec80DPreventiveHealthCheckUpUsr": " 0 "
       }
-    ]
+    }
+  },
+  "TaxesPaid": {
+    "TCS": " 0 ",
+    "TDS": " 0 ",
+    "OthersInc": {
+      "SEC 10-5-LeaveTravelAllowance": " 0 ",
+      "SEC 10-14-i": " 0 ",
+      "SEC 10-13-A": " 0 "
+    },
+    "TotalTaxesPaid": " 15000 ",
+    "SelfAssessmentTax": " 0 ",
+    "AdvanceTax": " 0 "
+  },
+  "BalTaxPayable": " Integer ",
+  "ITR1_TaxComputation": {
+    "TotalIntrstPay": " 0 ",
+    "Section89": " 0 ",
+    "NetTaxLiability": " 0 ",
+    "Rebate87A": " 0 ",
+    "GrossTaxLiability": " 0 ",
+    "TotalTaxPayable": " 0 ",
+    "TotTaxPlusIntrstPay": " 0 ",
+    "TaxPayableOnRebate": " 0 ",
+    "EducationCess": " 0 ",
+    "IntrstPay": {
+      "IntrstPayUs234A": " 0 ",
+      "IntrstPayUs234C": " 0 ",
+      "IntrstPayUs234B": " 0 "
+    }
+  },
+  "refund": {
+    "RefundDue": "15000",
+    "BankAccountDtls": {
+      "PriBankDetails": {
+        "IFSCCode": " ICIC0000558",
+        "BankName": " ICICI BANK LIMITED",
+        "BankAccountNo": " 055811234556"
+      }
+    },
+    "employer": {
+      "tan": " abcde123456",
+      "Name of deductor": "Zoop.one",
+      "Salary": " 240000",
+      "Tax Deducted": "15000"
+    }
   }
 }
 ```
