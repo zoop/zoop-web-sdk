@@ -1178,7 +1178,7 @@ The webhook response will be sent to `webhook_url` provided at the init call. Wh
   "phone_number": "<<PHONE>>",
   "dob": "<<DOB>>",
   "request_version": "1.0",
-  "pan": "<<PAN_NUMBER>>",
+  "pan": "ABCDE1234F",
   "request_medium": "<<web | android | ios>>",
   "sdk_name": "1",
   "data": {
@@ -1195,8 +1195,8 @@ The webhook response will be sent to `webhook_url` provided at the init call. Wh
               "EmailAddress": "abc@gmail.com",
               "LocalityOrArea": "Tehri Garhwal"
             },
-            "AadhaarCardNo": "1123457684302546",
-            "PAN": "BFZPT11897",
+            "AadhaarCardNo": "**** **** 1234",
+            "PAN": "ABCDE1234F",
             "DOB": "04/04/1982",
             "Name": "Rahul  Gupta",
             "EmployerCategory": "Not Applicable"
@@ -1286,8 +1286,8 @@ The webhook response will be sent to `webhook_url` provided at the init call. Wh
             },
             "EmployerCategory": "Not Applicable",
             "Status": "RES - Resident",
-            "AadhaarCardNo": "1123457684302546",
-            "PAN": "BFZPT11897",
+            "AadhaarCardNo": "**** **** 1234",
+            "PAN": "ABCDE1234F",
             "DOB": "04/04/1982",
             "Name": "Rahul Gupta"
           },
