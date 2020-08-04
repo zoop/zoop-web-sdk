@@ -261,9 +261,10 @@ const gatewayOptions = {
   color_ft: "FFFFFF", //(optional)Add the hex for colour of text of company name
   color_bg: "2C3E50", //(optional)Add the hex for background colour to be set for gateway.
   logo_url: "https://your-square-product-logo-image-url-here.png", //(required)
-  otp_allowed: "y", // (optional) default value is 'y'
-  fingerprint_allowed: "n", //(optional) default value 'y'
-  iris_allowed: "n", //(optional) default value 'y',
+  otp_mode: "y", // (optional) default value is 'y'
+  fp_mode: "n", //(optional) default value 'y'
+  ir_mode: "n", //(optional) default value 'y',
+  google_sign: "null", //(optional) default value 'null',
   phone_auth: "n", //(optional) default value 'n',
   draggable_sign: "y", //(optional) default value ‘n’,
   google_sign: "n", //(optional) default value ‘y’
