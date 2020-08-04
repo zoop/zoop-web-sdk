@@ -258,8 +258,8 @@ You can download or add the link to the CDN of our Web SDK. There are two functi
 ```js
 const gatewayOptions = {
   company_display_name: "<<Add your company name here>>", //(required)
-  front_text_color: "FFFFFF", //(optional)Add the hex for colour of text of company name
-  background_color: "2C3E50", //(optional)Add the hex for background colour to be set for gateway.
+  color_ft: "FFFFFF", //(optional)Add the hex for colour of text of company name
+  color_bg: "2C3E50", //(optional)Add the hex for background colour to be set for gateway.
   logo_url: "https://your-square-product-logo-image-url-here.png", //(required)
   otp_allowed: "y", // (optional) default value is 'y'
   fingerprint_allowed: "n", //(optional) default value 'y'
