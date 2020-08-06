@@ -264,7 +264,6 @@ const gatewayOptions = {
   otp_mode: "y", // (optional) default value is 'y'
   fp_mode: "n", //(optional) default value 'y'
   ir_mode: "n", //(optional) default value 'y',
-  google_sign: "null", //(optional) default value 'null',
   phone_auth: "n", //(optional) default value 'n',
   draggable_sign: "y", //(optional) default value ‘n’,
   google_sign: "n", //(optional) default value ‘y’
