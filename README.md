@@ -4,7 +4,7 @@ AadhaarAPI | ZOOP web SDK for E-sign and Bank Statement Analysis Gateway
 
 # Table of Contents
 
-## Zoop E-Sign Gateway.
+## Zoop E-Sign Gateway (v3 Beta).
 
 1. [Introduction](#esignIntroduction)
 2. [Process Flow](#esignProcessFlow)
@@ -110,7 +110,7 @@ accepted widely across India by various organizations.
 
 ### 3. End User Flow:
 
-1. Customer Login [ E-mail + OTP | Gmail Login | Phone + OTP (beta) ]
+1. Customer Login [ Phone + OTP ]
 2. Document displayed to customer. (Draggable signature option can be turned on via gateway config or
    signPageNumber and coordinates can be fixed during initiation call)
 3. Customer chooses Mode of Authentication for performing E-Sign
@@ -119,7 +119,7 @@ accepted widely across India by various organizations.
 5. After successful EKYC customer is displayed Sign details received and customer’s consent is taken to
    attach signature to the document and share a copy with requesting organization.
 6. On success, customer is provided with an option to download the signed file. Also, a download URL is sent
-   to customer’s Email and responseURL which is valid for 48 hours.
+   to customer’s phone number and responseURL which is valid for 48 hours.
 7. On failure during request to ESP, customer is displayed an error code and error message. Same error details
    are sent to the responseURL.
 8. End Customer can validate the signature on PDF by opening the PDF in acrobat reader and Developer can
@@ -137,7 +137,7 @@ the gateway.
 
 #### 4.1 Init URL:
 
-    URL: POST {{base_url}}/gateway/esign/init/
+    URL: POST {{base_url}}/esign/v3/init/
 
 **{{base_url}}**:
 
@@ -145,7 +145,7 @@ the gateway.
 
 **For Production Environment:** https://prod.aadhaarapi.com
 
-**Example Url:** https://preprod.aadhaarapi.com/gateway/esign/init/
+**Example Url:** https://preprod.aadhaarapi.com/esign/v3/init/
 
 <a name="esignRequestHeaders"></a>
 
@@ -171,8 +171,7 @@ Content-Type: application/json
   "signerName": "<<name of the signer, must be same as on Aadhaar Card>>",
   "signerCity": "<<city of the signer, preferably as mentioned in Aadhaar>>",
   "purpose": "Purpose of transaction, Mandatory",
-  "responseURL": "<<POST[REST] URL to which response is to be sent after the transaction is complete>>",
-  "version": "2.0 <<current E-sign version>>"
+  "responseURL": "<<POST[REST] URL to which response is to be sent after the transaction is complete>>"
 }
 ```
 
@@ -187,7 +186,6 @@ Content-Type: application/json
 | signerCity  | Place of signing (Current City/As mentioned in Aadhaar)                                         |                                                                               |
 | purpose     | Purpose of document signature                                                                   | Mandate as per norms. Will be used to generate consent text and logged in DB. |
 | responseURL | POST API URL where the Agency receives the response after the e-signing is completed.           | A valid POST API URL, else response back to your server will fail.            |
-| version     | Current E-sign version (2.0)                                                                    | Must be 2.0                                                                   |
 
 <a name="esignResponseParams"></a>
 
@@ -197,14 +195,15 @@ Content-Type: application/json
 {
   "id": "<<transactionId>>",
   "docs": ["<<document ID>>"],
-  "request version": "2.0",
+  "agreement": "Purpose for the signature",
+  "webhook_security_key": "<<security_key>>",
   "createdAt": "<<timestamp>>"
 }
 ```
 
 The above generated gateway transactionId has to be made available to frontend to open the gateway.
 
-**Note:** A transaction is valid only for 30 mins after generation.
+**Note:** A transaction is valid only for 45 mins after generation.
 
 <a name="setZoopEnv"></a>
 
@@ -267,8 +266,7 @@ const gatewayOptions = {
   phone_auth: "n", //(optional) default value 'n',
   draggable_sign: "y", //(optional) default value ‘n’,
   google_sign: "n", //(optional) default value ‘y’
-  customer_email: "name@example.com", // (optional) email id to prefill
-  customer_phone: "9999999999", // (optional) phone number to prefill
+  customer_phone: "9999999999" // (optional) phone number to prefill
 };
 ```
 
@@ -461,7 +459,7 @@ using the same **Esign Transaction Id**.
 #### 9.1 URL
 
 ```
-GET {{base_url}}/gateway/esign/:esign_transaction_id/fetch/
+GET {{base_url}}/esign/v3/<<esign_transaction_id>>/fetch/
 ```
 
 <a name="esignStatusResp"></a>
@@ -471,7 +469,6 @@ GET {{base_url}}/gateway/esign/:esign_transaction_id/fetch/
 ```json
 {
   "id": "<<transaction id>>",
-  "request_version": "2.0",
   "signer_consent": "Y",
   "response_url": "<<POST[REST] URL to which response is to be sent after the transaction is
   complete>>",
@@ -511,7 +508,6 @@ GET {{base_url}}/gateway/esign/:esign_transaction_id/fetch/
 | Response Parameter        | Description/Possible Values                                                                                               |
 | ------------------------- | ------------------------------------------------------------------------------------------------------------------------- |
 | id                        | E-sign Transaction Id                                                                                                     |
-| request_version           | Esign version – currently 2.0                                                                                             |
 | signer_consent            | Y/N - Will be N if user denies consent                                                                                    |
 | signed_document_count     | count of the number of documents signed                                                                                   |
 | response_url              | URL to which the response was sent on completion                                                                          |
@@ -1004,7 +1000,7 @@ You can download or add the link to the CDN of our Web SDK. There are two functi
     <script src="https://raw.githubusercontent.com/zoop/zoop-web-sdk/master/zoop-sdk.min.js"></script>
     <button onclick="openGateway()">Open ITR</button>
     <div id="zoop-gateway-model">
-        <div id="zoop-model-content" style="height: 500px;"></div>
+      <div id="zoop-model-content" style="height: 500px;"></div>
     </div>
     <script type="application/javascript">
       const gatewayOption = {
