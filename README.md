@@ -692,6 +692,7 @@ You can download or add the link to the CDN of our Web SDK. There are two functi
   </head>
   <body>
     <script src="https://static.aadhaarapi.com/sdk/v1.0.1/aadhaarapi-web-sdk.min.js"></script>
+    <button onclick="openGateway()">Open BSA Gateway</button>
     <script type="application/javascript">
       // Name of the this function can be anything you want.
       function openGateway() {
