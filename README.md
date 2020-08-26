@@ -505,38 +505,38 @@ GET {{base_url}}/esign/v3/<<esign_transaction_id>>/fetch/
 }
 ```
 
-| Response Parameter        | Description/Possible Values                                                                                               |
-| ------------------------- | ------------------------------------------------------------------------------------------------------------------------- |
-| id                        | E-sign Transaction Id                                                                                                     |
-| signer_consent            | Y/N - Will be N if user denies consent                                                                                    |
-| signed_document_count     | count of the number of documents signed                                                                                   |
-| response_url              | URL to which the response was sent on completion                                                                          |
-| current_document          | Current document number}                                                                                                  |
-| request_medium            | W for Web/ M for Mobile - Platform from which esign transaction was performed                                             |
-| public_ip                 | End user IP using which the transaction was performed.                                                                    |
-| env                       | 1/2 – 1(preproduction) & 2 (production)                                                                                   |
-| signer_name               | Name of signer as provided in INIT call.                                                                                  |
-| purpose                   | Purpose for signing the document                                                                                          |
-| signer_city               | City of signer as provided in INIT call.                                                                                  |
-| transaction_status        | Status Code to track last transaction state. List of codes available in Annexure1.                                        |
-| transaction_attempts      | Transaction attempt count. Currently allowed only once.                                                                   |
-| otp_attempts              | Number of times login OTP was requested                                                                                   |
-| otp_failures              | Number of times login failed due to wrong OTP                                                                             |
-| user_notified             | Y/N - User notified of the E-sign success and sent a copy of document to download.                                        |
-| response_to_agency        | Y/N - Response sent to responseURL was success or failure.                                                                |
-| createdAt                 | Transaction initiated at - YYYY-MM-DDTHH:MM:SS.122Z                                                                       |
-| documents[                | Is an object that provides details of the single/multiple documents in array. It has below mentioned values in the object |
-| { id                      | Document id                                                                                                               |
-| index                     | Index of document                                                                                                         |
-| doc_info                  | Info of the document                                                                                                      |
-| type                      | Format of the document. For now, only value pdf is supported                                                              |
-| dynamic_url               | Url to download the signed pdf                                                                                            |
-| sign_status               | Y/N - if document is signed by the user or not                                                                            |
-| auth_mode                 | O/F/I – OTP, Fingerprint, Iris                                                                                            |
-| response_status           | Y/N - if ESP response was success or not.                                                                                 |
-| error_code                | Error code from ESP/Internal (available only in case of error)                                                            |
-| error_message             | Error message from ESP/Internal (available only in case of error)                                                         |
-| request_timestamp } ,.. ] | Time at which the request was sent to ESP                                                                                 |
+| Response Parameter    | Description/Possible Values                                                                                               |
+| --------------------- | ------------------------------------------------------------------------------------------------------------------------- |
+| id                    | E-sign Transaction Id which will be used to open the gateway                                                              |
+| signer_consent        | Y/N - Will be N if user denies consent                                                                                    |
+| signed_document_count | count of the number of documents signed                                                                                   |
+| response_url          | URL to which the response was sent on completion                                                                          |
+| current_document      | Current document number}                                                                                                  |
+| request_medium        | W for Web/ M for Mobile - Platform from which esign transaction was performed                                             |
+| public_ip             | End user IP using which the transaction was performed.                                                                    |
+| env                   | 1/2 – 1(preproduction) & 2 (production)                                                                                   |
+| signer_name           | Name of signer as provided in INIT call.                                                                                  |
+| purpose               | Purpose for signing the document                                                                                          |
+| signer_city           | City of signer as provided in INIT call.                                                                                  |
+| transaction_status    | Status Code to track last transaction state. List of codes available in Annexure1.                                        |
+| transaction_attempts  | Transaction attempt count. Currently allowed only once.                                                                   |
+| otp_attempts          | Number of times login OTP was requested                                                                                   |
+| otp_failures          | Number of times login failed due to wrong OTP                                                                             |
+| user_notified         | Y/N - User gets notified about E-sign success and is sent a copy of the document to download                              |
+| response_to_agency    | Y/N - Response sent to responseURL, denotes success or failure                                                            |
+| createdAt             | Transaction initiated at - YYYY-MM-DDTHH:MM:SS.122Z                                                                       |
+| documents [           | Is an object that provides details of the single/multiple documents in array. It has below mentioned values in the object |
+| { id                  | Document id                                                                                                               |
+| index                 | Index of document                                                                                                         |
+| doc_info              | Info of the document                                                                                                      |
+| type                  | Format of the document. For now, only pdf is supported                                                                    |
+| dynamic_url           | Url to download the signed pdf                                                                                            |
+| sign_status           | Y/N - if document is signed by the user or not                                                                            |
+| auth_mode             | O/F/I – OTP, Fingerprint, Iris                                                                                            |
+| response_status       | Y/N - if ESP response was success or not.                                                                                 |
+| error_code            | Error code from ESP/Internal (available only in case of error)                                                            |
+| error_message         | Error message from ESP/Internal (available only in case of error)                                                         |
+| request_timestamp }]  | Time at which the request was sent to ESP                                                                                 |
 
 <a name="annexure"></a>
 
