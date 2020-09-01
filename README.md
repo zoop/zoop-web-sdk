@@ -213,7 +213,7 @@ First, you might have to specify the environment in which you want the SDK to ru
 
 ```html
 <script>
-  zoop.setEnvironment("production"); // Use 'staging' for staging environment
+  zoop.setEnvironment("production"); // Use 'staging' for Preprod environment
 </script>
 ```
 
@@ -221,7 +221,7 @@ First, you might have to specify the environment in which you want the SDK to ru
 
 ### 6. Adding Web SDK To Your Project
 
-You can download or add the link to the CDN of our Web SDK. There are two function calls to open the gateway. They should called in the order mentioned in the docs. Firstly, to initiate the gateway you have to call `zoop.eSignGatewayInit(gatewayOptions)` with the [gateway option](#esign-gateway-setup). The next step would be to open the gateway. That can be done by simply calling `zoop.eSignGateway(<<transaction_id>>)` with the transaction ID generated in the init call. For your ease we have also added one simple example below.
+You can download or add the link to the CDN of our Web SDK. There are two function calls to open the gateway. They should called in the order mentioned in the docs. Firstly, to initiate the gateway you have to call `zoop.eSignGatewayInit(gatewayOptions)` with the [gateway option](#esign-gateway-setup). The next step would be to open the gateway. That can be done by simply calling `zoop.eSignGateway(<<transaction_id>>)` with the transaction ID generated in the init call. For your ease we have also added one sample example below.
 
 ```html
 <!DOCTYPE html>
@@ -511,7 +511,7 @@ GET {{base_url}}/esign/v3/<<esign_transaction_id>>/fetch/
 | signer_consent        | Y/N - Will be N if user denies consent                                                                                    |
 | signed_document_count | count of the number of documents signed                                                                                   |
 | response_url          | URL to which the response was sent on completion                                                                          |
-| current_document      | Current document number}                                                                                                  |
+| current_document      | Current document number                                                                                                   |
 | request_medium        | W for Web/ M for Mobile - Platform from which esign transaction was performed                                             |
 | public_ip             | End user IP using which the transaction was performed.                                                                    |
 | env                   | 1/2 – 1(preproduction) & 2 (production)                                                                                   |
