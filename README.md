@@ -997,12 +997,12 @@ You can download or add the link to the CDN of our Web SDK. There are two functi
     <title>Your Site</title>
   </head>
   <body>
-    <script src="https://raw.githubusercontent.com/zoop/zoop-web-sdk/master/zoop-sdk.min.js"></script>
     <button onclick="openGateway()">Open ITR</button>
     <div id="zoop-gateway-model">
-      <div id="zoop-model-content" style="height: 500px;"></div>
+      <div id="zoop-model-content" style="height: 500px"></div>
     </div>
-    <script type="application/javascript">
+    <script src="./zoop-sdk.min.js" type="text/javascript"></script>
+    <script>
       const gatewayOption = {
         txt_color: "rgb(102,102,102)",
         bg_color: "rgb(243,243,243)",
