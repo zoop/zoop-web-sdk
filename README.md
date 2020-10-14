@@ -886,8 +886,8 @@ Income tax return is a form where a person submits information about his income 
 
 1. At your backend server, Initiate the ITD transaction using a simple POST Rest API call. Details of these are available in the documents later. You will require API key and Agency Id for accessing this API which can be generated from the Dashboard. This gateway transaction id then needs to be communicated back to the frontend to our Web SDK.
 2. This gateway transaction id then needs to be communicated back to the frontend to our Web SDK.
-3. After adding the Web SDK in your project, client has to pass the above generated transaction id to an SDK function, called `zoop.initIncomeTaxDepartment(gatewayOption)` which is to help us to under different requirement of the gateway you are trying to open.
-4. After the initialization of the transaction, to open the gateway, you have to call `zoop.openIncomeTaxDepartmentGateway(<<transaction_id>>)` function.
+3. After adding the Web SDK in your project, client has to pass the above generated transaction id to an SDK function, called `zoop.initItdGateway(gatewayOption)` which is to help us to under different requirement of the gateway you are trying to open.
+4. After the initialization of the transaction, to open the gateway, you have to call `zoop.openItdGateway(<<transaction_id>>)` function.
 5. Once the transaction is successful or failed, the provided webhook will be called with the data about the transaction.
 6. Client will also have a REST API available to pull the status of a gateway transaction from backend.
 
@@ -1078,7 +1078,7 @@ After successful response you will receive the following JSON
 
 ### 4. Adding Web SDK To Your Project
 
-You can download or add the link to the CDN of our Web SDK. There are two function calls to open the gateway. They should called in the order mentioned in the docs. Firstly, to initiate the gateway you have to call `zoop.initIncomeTaxDepartment(gatewayOption)` with the gateway option to modify the gateway UI. The next step would be to open the gateway. That can be done by simply calling `zoop.openIncomeTaxDepartmentGateway(<<transaction_id>>)` and pass the transaction id generated in the init call first parameter. For your ease we have also added one simple example below.
+You can download or add the link to the CDN of our Web SDK. There are two function calls to open the gateway. They should called in the order mentioned in the docs. Firstly, to initiate the gateway you have to call `zoop.initItdGateway(gatewayOption)` with the gateway option to modify the gateway UI. The next step would be to open the gateway. That can be done by simply calling `zoop.openItdGateway(<<transaction_id>>)` and pass the transaction id generated in the init call first parameter. For your ease we have also added one simple example below.
 
 <a name="itd-sdk-example">
 
@@ -1127,9 +1127,9 @@ You can download or add the link to the CDN of our Web SDK. There are two functi
         // Set the environment
         zoop.setEnvironment("staging"); // use "production" for the production environment
         // Pass gateway option to modify UI here.
-        zoop.initIncomeTaxDepartment(gatewayOption);
+        zoop.initItdGateway(gatewayOption);
         // Call this function with transaction ID to open the gateway
-        zoop.openIncomeTaxDepartmentGateway("<<transaction_id>>");
+        zoop.openItdGateway("<<transaction_id>>");
       }
     </script>
   </body>
@@ -1140,7 +1140,7 @@ You can download or add the link to the CDN of our Web SDK. There are two functi
 
 #### 4.1 Gateway Option Format
 
-The options parameter that is passed while calling `zoop.initIncomeTaxDepartment` has the following format.
+The options parameter that is passed while calling `zoop.initItdGateway` has the following format.
 
 ```js
 const gatewayOption = {
