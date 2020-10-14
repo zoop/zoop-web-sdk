@@ -49,7 +49,7 @@ AadhaarAPI | ZOOP web SDK for E-sign and Bank Statement Analysis Gateway
    - [USER STAGES](#bsaUserStage)
    - [FAILURE RESPONSE BODY](#bsaStageFailure)
 
-## Zoop Income Tax Department (ITD) Gateway (Beta)
+## Zoop Income Tax Department V2.0 (ITD) Gateway (Beta)
 
 1. [Introduction](#itdIntro)
 2. [Process Flow](#itdProcessFlow)
@@ -871,13 +871,14 @@ After creating an initialization request successfully you can check at which sta
 }
 ```
 
-## ZOOP INCOME TAX DEPARTMENT (ITD) GATEWAY (Beta)
+## ZOOP INCOME TAX DEPARTMENT V2.0 (ITD) GATEWAY (Beta)
 
 <a name="itdIntro"></a>
 
 ### 1. Introduction
 
-Income Tax Department is the form in which assessee files information about his Income and tax thereon to Income Tax Department. The Zoop ITD Gateway allows you to fetch the tax returns of your client and make better business decision.
+Income Tax Department holds and verifies the earnings and tax related information of an individual.
+Income tax return is a form where a person submits information about his income earned and the tax paid to the Department. Whereas 26AS is a consolidated annual tax credit statement of an individual's earnings as per the ITD records. The Zoop ITD Gateway allows you to fetch and verify the financial information of your client in order to make better business decisions.
 
 <a name="itdProcessFlow"></a>
 
@@ -942,23 +943,28 @@ Content-Type: application/json
 }
 ```
 
-| Parameters          | Mandatory | Description/Value                                      |
-| ------------------- | --------- | ------------------------------------------------------ |
-| mode                | true      | REDIRECT or POPUP                                      |
-| redirect_url        | false     | A valid URL                                            |
-| webhook_url         | true      | A valid URL                                            |
-| purpose             | true      | The reason for the transaction                         |
-| phone_override      | false     | If you wanted to update your phone number              |
-| document_required { | true      | If you wanted to update your phone number              |
-| ITR                 | false     | Specify for how many years of ITR you wanted to fetch  |
-| 26AS }              | false     | Specify for how many years of 26AS you wanted to fetch |
-| phone               | true      | Phone number you wanted to use at our platform         |
-| pan                 | true      | PAN number linked to ITR portal                        |
-| dob                 | true      | Date of birth of the PAN holder in MM-DD-YYYY format   |
-| pdf_required        | false     | Whether you need PDF of ITR fetched                    |
+| Parameters          | Mandatory | Description/Value                                                                 |
+| ------------------- | --------- | --------------------------------------------------------------------------------- |
+| mode                | true      | REDIRECT or POPUP                                                                 |
+| redirect_url        | false     | A valid URL                                                                       |
+| webhook_url         | true      | A valid POST API URL, Detailed response will be sent here for success or failures |
+| purpose             | true      | The reason for the transaction                                                    |
+| phone_override      | false     | If you wanted to update your phone number                                         |
+| document_required { | true      | If you wanted to update your phone number                                         |
+| ITR                 | false     | Specify for how many years of ITR you wanted to fetch                             |
+| 26AS }              | false     | Specify for how many years of 26AS you wanted to fetch                            |
+| phone               | true      | Phone number you wanted to use at our platform                                    |
+| pan                 | true      | PAN number linked to ITR portal                                                   |
+| dob                 | true      | Date of birth of the PAN holder in MM-DD-YYYY format                              |
+| pdf_required        | false     | Whether you need PDF of ITR fetched                                               |
 
-**NOTE**: If you have provided `phone_override` to `true`, the user has to
-remove us as e-Return Intermediary from the ITD portal.
+**NOTE**: If an existing user submits invalid combination of Phone registered against PAN and DOB. We will return an error that _PAN is already linked with a different phone number **\*\***1234_ with last 4 digits of correct phone number.
+In such scenario if the user doesn't have the phone number then they need to login into Income Tax Department (ITD) Portal using their ID password and remove us as e-Return Intermediary using this process.
+After that you need to provided `phone_override` as `true` to evade the error.
+
+**New User** - New unique user being added to the ITD Portal for ITR and/or 26AS verification for the first time via ZOOP.ONE
+
+**Existing User** - User that was added to ITD by ZOOP.ONE to verify and fetch ITR and/or 26AS details, has been requested for re-verification of documents for the user on the same credentials as stored in ZOOP.ONE system earlier.
 
 <a name="itdRespParam"></a>
 
@@ -1276,116 +1282,114 @@ The webhook response will be sent to `webhook_url` provided at the init call. Wh
   "id": "<<transaction_id>>",
   "pan_id": "ABCDE1234F",
   "result": {
-    "2019-20": {
-      "PersonalInfo": {
-        "Name": "USER NAME",
-        "AssesseeName": {
-          "FirstName": "",
-          "MiddleName": "",
-          "LastName": ""
-        },
-        "PAN": "ABCDE1234F",
-        "DOB": "01/01/1990",
-        "Status": "",
-        "AadhaarCardNo": "123412341234",
-        "EmployerCategory": "Not Applicable(eg. Family pension etc)",
-        "Address": {
-          "PinCode": "1111111",
-          "ResidenceNo": "Address TALA BUILDING",
-          "CityOrTownOrDistrict": "CITY",
-          "State": "STATE OF USER",
-          "MobileNo": "91 - 9999999999",
-          "EmailAddress": "user@domain.com",
-          "LocalityOrArea": "Locality"
+    "PersonalInfo": {
+      "Name": " String ",
+      "Father Name": "Sanjay Bansal",
+      "AssesseeName": {
+        "FirstName": " Rajat ",
+        "MiddleName": " ",
+        "LastName": " Bansal "
+      },
+      "PAN": " ABCDE1234F ",
+      "DOB": "25-10-1992",
+      "Status": "Active",
+      "AadhaarCardNo": "**** **** 9876",
+      "EmployerCategory": " Government/Public sector undertaking/Pensioners/Others ",
+      "Address": {
+        "ResidenceNo": " H.NO 89 DWARKA NAGAR COACH FACTORY",
+        "ResidenceName": "Rajat Bansal",
+        "RoadOrStreet": "Old post office",
+        "LocalityOrArea": " DWARKA NGAR",
+        "CityOrTownOrDistrict": " BHOPAL",
+        "State": " MADHYA PRADESH",
+        "PinCode": " 462010",
+        "MobileNo": "9999999999",
+        "EmailAddress": " abc@gmail.com ",
+        "Country": "India"
+      }
+    },
+    "ITR1_IncomeDeductions": {
+      "Salary": " Integer ",
+      "IncomeFromSal": " 452000",
+      "AlwnsNotExempt": " 0 ",
+      "PerquisitesValue": " 0 ",
+      "ProfitsInSalary": " 0 ",
+      "DeductionUs16": " 40000 ",
+      "TotalIncomeOfHP": " 0 ",
+      "IncomeOthSrc": " 0 ",
+      "GrossTotIncome": " 412000",
+      "TotalIncome": " 0 ",
+      "UsrDeductUndChapVIA": {
+        "Section80C": " 0 ",
+        "Section80CCC": " 0 ",
+        "Section80CCDEmployeeOrSE": " 0 ",
+        "Section80CCD1B": " 0 ",
+        "Section80CCDEmployer": " 0 ",
+        "Section80CCG": " 0 ",
+        "Section80DD": " 0 ",
+        "Section80DDB": " 0 ",
+        "Section80E": " 195000 ",
+        "Section80EE": " 0 ",
+        "Section80G": " 0 ",
+        "Section80GG": " 30000 ",
+        "Section80GGA": " 0 ",
+        "Section80GGC": " 0 ",
+        "Section80RRB": " 0 ",
+        "Section80QQB": " 0 ",
+        "Section80TTA": " 0 ",
+        "Section80U": " 0 ",
+        "TotalChapVIADeductions": " 225000",
+        "TotalIncome": " 187000 ",
+        "Section80DHealthInsPremium": {
+          "Sec80DHealthInsurancePremiumUsr": " 0 ",
+          "Sec80DMedicalExpenditureUsr": " 0 ",
+          "Sec80DPreventiveHealthCheckUpUsr": " 0 "
+        }
+      }
+    },
+    "TaxesPaid": {
+      "TCS": " 0 ",
+      "TDS": " 0 ",
+      "OthersInc": {
+        "SEC 10-5-LeaveTravelAllowance": " 0 ",
+        "SEC 10-14-i": " 0 ",
+        "SEC 10-13-A": " 0 "
+      },
+      "TotalTaxesPaid": " 15000 ",
+      "SelfAssessmentTax": " 0 ",
+      "AdvanceTax": " 0 "
+    },
+    "BalTaxPayable": " Integer ",
+    "ITR1_TaxComputation": {
+      "TotalIntrstPay": " 0 ",
+      "Section89": " 0 ",
+      "NetTaxLiability": " 0 ",
+      "Rebate87A": " 0 ",
+      "GrossTaxLiability": " 0 ",
+      "TotalTaxPayable": " 0 ",
+      "TotTaxPlusIntrstPay": " 0 ",
+      "TaxPayableOnRebate": " 0 ",
+      "EducationCess": " 0 ",
+      "IntrstPay": {
+        "IntrstPayUs234A": " 0 ",
+        "IntrstPayUs234C": " 0 ",
+        "IntrstPayUs234B": " 0 "
+      }
+    },
+    "refund": {
+      "RefundDue": "15000",
+      "BankAccountDtls": {
+        "PriBankDetails": {
+          "IFSCCode": " ICIC0000558",
+          "BankName": " ICICI BANK LIMITED",
+          "BankAccountNo": " 055811234556"
         }
       },
-      "ITR1_IncomeDeductions": {
-        "ProfitsInSalary": "0",
-        "Salary": "10000",
-        "AlwnsNotExempt": "0",
-        "IncomeFromSal": "10000",
-        "DeductionUs16": "10000",
-        "UsrDeductUndChapVIA": {
-          "Section80DD": "0",
-          "TotalChapVIADeductions": "0",
-          "Section80GGA": "0",
-          "Section80DDB": "0",
-          "Section80CCG": "0",
-          "Section80GG": "0",
-          "Section80CCDEmployer": "0",
-          "Section80CCD1B": "0",
-          "Section80GGC": "0",
-          "Section80TTA": "0",
-          "Section80DHealthInsPremium": {
-            "Sec80DHealthInsurancePremiumUsr": "0",
-            "Sec80DMedicalExpenditureUsr": "0",
-            "Sec80DPreventiveHealthCheckUpUsr": "0"
-          },
-          "Section80CCDEmployeeOrSE": "0",
-          "Section80E": "0",
-          "Section80C": "0",
-          "Section80CCC": "0",
-          "Section80EE": "0",
-          "Section80U": "0"
-        },
-        "IncomeOthSrc": "0",
-        "GrossTotIncome": "0",
-        "TotalIncomeOfHP": "0",
-        "TotalIncome": "0",
-        "PerquisitesValue": "0"
-      },
-      "TaxesPaid": {
-        "TCS": "0",
-        "TDS": "0",
-        "OthersInc": {
-          "SEC 10-5-LeaveTravelAllowance": "0",
-          "SEC 10-14-i": "0",
-          "SEC 10-13-A": "0"
-        },
-        "TotalTaxesPaid": "0",
-        "SelfAssessmentTax": "0",
-        "AdvanceTax": "0"
-      },
-      "BalTaxPayable": "0",
-      "ITR1_TaxComputation": {
-        "TotalIntrstPay": "0",
-        "Section89": "0",
-        "NetTaxLiability": "0",
-        "Rebate87A": "0",
-        "GrossTaxLiability": "0",
-        "TotalTaxPayable": "0",
-        "TotTaxPlusIntrstPay": "0",
-        "TaxPayableOnRebate": "0",
-        "EducationCess": "0",
-        "IntrstPay": {
-          "IntrstPayUs234A": "0",
-          "IntrstPayUs234B": "0",
-          "IntrstPayUs234C": "0"
-        }
-      },
-      "refund": {
-        "RefundDue": "0",
-        "BankAccountDtls": {
-          "PriBankDetails": {
-            "IFSCCode": "CBIN028XXXX",
-            "BankName": "CENTRAL BANK OF INDIA",
-            "BankAccountNo": "0391XXXXXX"
-          }
-        },
-        "employer": {
-          "tan": "",
-          "name": ""
-        }
-      },
-      "TaxPaid": {
-        "TaxesPaid": {
-          "AdvanceTax": "0",
-          "SelfAssessmentTax": "0",
-          "TDS": "0",
-          "TCS": "0",
-          "TotalTaxesPaid": "0"
-        },
-        "BalTaxPayable": "0"
+      "employer": {
+        "tan": " abcde123456",
+        "Name of deductor": "Zoop.one",
+        "Salary": " 240000",
+        "Tax Deducted": "15000"
       }
     }
   },
