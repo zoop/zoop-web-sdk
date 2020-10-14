@@ -877,7 +877,7 @@ After creating an initialization request successfully you can check at which sta
 
 ### 1. Introduction
 
-Income Tax Department is the form in which assessee files information about his Income and tax thereon to Income Tax Department. The Zoop ITD Gateway allows allows you to fetch the tax returns of your client and make better business decision.
+Income Tax Department is the form in which assessee files information about his Income and tax thereon to Income Tax Department. The Zoop ITD Gateway allows you to fetch the tax returns of your client and make better business decision.
 
 <a name="itdProcessFlow"></a>
 
@@ -908,7 +908,7 @@ To initiate a gateway transaction a REST API call has to be made to backend. Thi
 
 **For Production Environment:** https://prod.aadhaarapi.com
 
-**Example Url:** https://preprod.aadhaarapi.com/itd/v1/init
+**Example Url:** https://preprod.aadhaarapi.com/itd/v2/init
 
 <a name="itdRequestHeader"></a>
 
