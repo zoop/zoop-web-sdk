@@ -955,7 +955,7 @@ Content-Type: application/json
 | 26AS }              | false     | Specify for how many years of 26AS you wanted to fetch                            |
 | phone               | true      | Phone number you wanted to use at our platform                                    |
 | pan                 | true      | PAN number linked to ITR portal                                                   |
-| dob                 | true      | Date of birth of the PAN holder in MM-DD-YYYY format                              |
+| dob                 | true      | Date of birth of the PAN holder in DD-MM-YYYY format                              |
 | pdf_required        | false     | Whether you need PDF of ITR fetched                                               |
 
 **NOTE**: If an existing user submits invalid combination of Phone registered against PAN and DOB. We will return an error that _PAN is already linked with a different phone number **\*\***1234_ with last 4 digits of correct phone number.
