@@ -1080,6 +1080,8 @@ After successful response you will receive the following JSON
 
 You can download or add the link to the CDN of our Web SDK. There are two function calls to open the gateway. They should called in the order mentioned in the docs. Firstly, to initiate the gateway you have to call `zoop.initItdGateway(gatewayOption)` with the gateway option to modify the gateway UI. The next step would be to open the gateway. That can be done by simply calling `zoop.openItdGateway(<<transaction_id>>)` and pass the transaction id generated in the init call first parameter. For your ease we have also added one simple example below.
 
+**Playground**: [Codesandbox](https://codesandbox.io/s/zoop-itd-sample-gateway-ldy9v?file=/index.html:1937-1995)
+
 <a name="itd-sdk-example">
 
 ```html
@@ -1093,7 +1095,7 @@ You can download or add the link to the CDN of our Web SDK. There are two functi
   <body>
     <button onclick="openGateway()">Open ITD</button>
     <div id="zoop-gateway-model">
-      <div id="zoop-model-content" style="height: 500px"></div>
+      <div id="zoop-model-content" style="height: 500px;"></div>
     </div>
     <script src="./zoop-sdk.min.js" type="text/javascript"></script>
     <script>
@@ -1104,26 +1106,27 @@ You can download or add the link to the CDN of our Web SDK. There are two functi
         btn_txt_color: "rgb(255,255,255)",
         logo_url: "https://your-awesome-logo.png"
       };
-      // The following event will be fired in case of any error received
-      zoop.on("itd-error", (message) => {
-        // If any error happen then this errorCode will be passed to the user
-        console.log(message);
-      });
-      // The following event will be fired once ITR pulled successfully
-      zoop.on("itd-success", (message) => {
-        // If any error happen then this errorCode will be passed to the user
-        console.log(message);
-      });
-      // The below event fires when user denies the consent of moving the transaction forward
-      zoop.on("itd-consent-denied", (message) => {
-        console.log(message);
-      });
-      // The below event fires when user deliberately closed the ongoing transaction
-      zoop.on("itd-gateway-terminated", (message) => {
-        console.log(message);
-      });
+
       // Name of the this function can be anything you want.
       function openGateway() {
+        // The following event will be fired in case of any error received
+        zoop.on("itd-error", (message) => {
+          // If any error happen then this errorCode will be passed to the user
+          console.log(message);
+        });
+        // The following event will be fired once ITR pulled successfully
+        zoop.on("itd-success", (message) => {
+          // If any error happen then this errorCode will be passed to the user
+          console.log(message);
+        });
+        // The below event fires when user denies the consent of moving the transaction forward
+        zoop.on("itd-consent-denied", (message) => {
+          console.log(message);
+        });
+        // The below event fires when user deliberately closed the ongoing transaction
+        zoop.on("itd-gateway-terminated", (message) => {
+          console.log(message);
+        });
         // Set the environment
         zoop.setEnvironment("staging"); // use "production" for the production environment
         // Pass gateway option to modify UI here.
