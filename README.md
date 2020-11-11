@@ -950,8 +950,8 @@ Content-Type: application/json
 | webhook_url         | true      | A valid POST API URL, Detailed response will be sent here for success or failures |
 | purpose             | true      | The reason for the transaction                                                    |
 | phone_override      | false     | If you wanted to update your phone number                                         |
-| document_required { | true      | If you wanted to update your phone number                                         |
-| ITR                 | false     | Specify for how many years of ITR you wanted to fetch                             |
+| document_required   | true      | The document for which you wanted to get the details                              |
+| { ITR               | false     | Specify for how many years of ITR you wanted to fetch                             |
 | 26AS }              | false     | Specify for how many years of 26AS you wanted to fetch                            |
 | phone               | true      | Phone number you wanted to use at our platform                                    |
 | pan                 | true      | PAN number linked to ITR portal                                                   |
