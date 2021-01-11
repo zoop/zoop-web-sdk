@@ -201,7 +201,9 @@ You can also attach signature on all the pages of the document. The signature wi
     "data": "document data in based64 format",
     "type": "pdf is only supported for now",
     "info": "information about the document – minimum length 15",
-    <strong>"signPageNumber": 0</strong>
+    <strong>"signPageNumber": 0,</strong>
+    "xCoordinate": 100,
+    "yCoordinate": 100
   },
   "signerName": "name of the signer, must be same as on Aadhaar Card",
   "signerCity": "city of the signer, preferably as mentioned in Aadhaar",
