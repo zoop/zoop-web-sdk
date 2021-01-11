@@ -4,7 +4,7 @@ AadhaarAPI | ZOOP web SDK for E-sign and Bank Statement Analysis Gateway
 
 # Table of Contents
 
-## Zoop E-Sign Gateway (v3 Beta).
+## Zoop E-Sign Gateway (v3).
 
 1. [Introduction](#esignIntroduction)
 2. [Process Flow](#esignProcessFlow)
@@ -13,6 +13,7 @@ AadhaarAPI | ZOOP web SDK for E-sign and Bank Statement Analysis Gateway
    - [Init URL](#esignInitUrl)
    - [Request Headers](#esignRequestHeaders)
    - [Request Body Params](#esignRequestbody)
+      - [Sign on All Pages](#esignSignAllPages)
    - [Response Params](#esignResponseParams)
 5. [Set Zoop Environment](#setZoopEnv)
 6. [Adding Web SDK To Your Project](#esignAddSDK)
@@ -188,6 +189,30 @@ Content-Type: application/json
 | signerCity  | Place of signing (Current City/As mentioned in Aadhaar)                                         |                                                                               |
 | purpose     | Purpose of document signature                                                                   | Mandate as per norms. Will be used to generate consent text and logged in DB. |
 | responseURL | POST API URL where the Agency receives the response after the e-signing is completed.           | A valid POST API URL, else response back to your server will fail.            |
+
+<a name="esignSignAllPages"></a>
+
+#### 4.3.1 Sign on All Pages
+
+You can also attach signature on all the pages of the document. The signature will be attached on the **same coordinate of every page**. In order to attach the signature on every page you need to provide `signPageNumber` as 0 in the init call.
+
+<pre><code class="language-json">{
+  "document": {
+    "data": "document data in based64 format",
+    "type": "pdf is only supported for now",
+    "info": "information about the document – minimum length 15",
+    <strong>"signPageNumber": 0,</strong>
+    "xCoordinate": 100,
+    "yCoordinate": 100
+  },
+  "signerName": "name of the signer, must be same as on Aadhaar Card",
+  "signerCity": "city of the signer, preferably as mentioned in Aadhaar",
+  "purpose": "Purpose of transaction, Mandatory",
+  "responseURL": "URL to which response is to be sent after the transaction is complete"
+}
+</code></pre>
+
+Depending on your requirement, you may or may not be using draggable signature option. If you are using the draggable signature option and if you provide the `signPageNumber` as 0 then the signature will be attached to all of the pages where user sets the drag position in the document.
 
 <a name="esignResponseParams"></a>
 
@@ -943,20 +968,20 @@ Content-Type: application/json
 }
 ```
 
-| Parameters          | Mandatory | Description/Value                                                                 |
-| ------------------- | --------- | --------------------------------------------------------------------------------- |
-| mode                | true      | REDIRECT or POPUP                                                                 |
-| redirect_url        | false     | A valid URL                                                                       |
-| webhook_url         | true      | A valid POST API URL, Detailed response will be sent here for success or failures |
-| purpose             | true      | The reason for the transaction                                                    |
-| phone_override      | false     | If you wanted to update your phone number                                         |
-| document_required   | true      | The document for which you wanted to get the details                              |
-| { ITR               | false     | Specify for how many years of ITR you wanted to fetch                             |
-| 26AS }              | false     | Specify for how many years of 26AS you wanted to fetch                            |
-| phone               | true      | Phone number you wanted to use at our platform                                    |
-| pan                 | true      | PAN number linked to ITR portal                                                   |
-| dob                 | true      | Date of birth of the PAN holder in DD-MM-YYYY format                              |
-| pdf_required        | false     | Whether you need PDF of ITR fetched                                               |
+| Parameters        | Mandatory | Description/Value                                                                 |
+| ----------------- | --------- | --------------------------------------------------------------------------------- |
+| mode              | true      | REDIRECT or POPUP                                                                 |
+| redirect_url      | false     | A valid URL                                                                       |
+| webhook_url       | true      | A valid POST API URL, Detailed response will be sent here for success or failures |
+| purpose           | true      | The reason for the transaction                                                    |
+| phone_override    | false     | If you wanted to update your phone number                                         |
+| document_required | true      | The document for which you wanted to get the details                              |
+| { ITR             | false     | Specify for how many years of ITR you wanted to fetch                             |
+| 26AS }            | false     | Specify for how many years of 26AS you wanted to fetch                            |
+| phone             | true      | Phone number you wanted to use at our platform                                    |
+| pan               | true      | PAN number linked to ITR portal                                                   |
+| dob               | true      | Date of birth of the PAN holder in DD-MM-YYYY format                              |
+| pdf_required      | false     | Whether you need PDF of ITR fetched                                               |
 
 **NOTE**: If an existing user submits invalid combination of Phone registered against PAN and DOB. We will return an error that _PAN is already linked with a different phone number **\*\***1234_ with last 4 digits of correct phone number.
 In such scenario if the user doesn't have the phone number then they need to login into Income Tax Department (ITD) Portal using their ID password and remove us as e-Return Intermediary using this process.
