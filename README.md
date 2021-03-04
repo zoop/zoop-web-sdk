@@ -293,7 +293,8 @@ const gatewayOptions = {
   phone_auth: "n", //(optional) default value 'n',
   draggable_sign: "y", //(optional) default value ‘n’,
   google_sign: "n", //(optional) default value ‘y’
-  customer_phone: "9999999999" // (optional) phone number to prefill
+  customer_phone: "9999999999", // (optional) phone number to prefill,
+  mode: "POPUP", // (optional) open gateway in an iframe (POPUP) or in a new tab (TAB)
 };
 ```
 
