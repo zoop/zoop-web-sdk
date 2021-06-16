@@ -263,7 +263,7 @@ You can download or add the link to the CDN of our Web SDK. There are two functi
     <div id="zoop-gateway-model">
       <div id="zoop-model-content"></div>
     </div>
-    <script src="https://static.aadhaarapi.com/sdk/v1.0.1/aadhaarapi-web-sdk.min.js"></script>
+    <script src="./zoop-sdk.min.js"></script>
     <script type="application/javascript">
       // Name of the this function can be anything you want.
       function openGateway() {
@@ -715,7 +715,7 @@ You can download or add the link to the CDN of our Web SDK. There are two functi
     <title>Your Site</title>
   </head>
   <body>
-    <script src="https://static.aadhaarapi.com/sdk/v1.0.1/aadhaarapi-web-sdk.min.js"></script>
+    <script src="./zoop-sdk.min.js"></script>
     <button onclick="openGateway()">Open BSA Gateway</button>
     <script type="application/javascript">
       // Name of the this function can be anything you want.
