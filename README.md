@@ -964,8 +964,7 @@ Content-Type: application/json
     "ITR": 1,
     "26AS": 2
   },
-  "pan": "ABCDE1234F",
-  "pdf_required": false
+  "pan": "ABCDE1234F"
 }
 ```
 
@@ -982,7 +981,6 @@ Content-Type: application/json
 | phone             | true      | Phone number you wanted to use at our platform                                    |
 | pan               | true      | PAN number linked to ITR portal                                                   |
 | dob               | true      | Date of birth of the PAN holder in DD-MM-YYYY format                              |
-| pdf_required      | false     | Whether you need PDF of ITR fetched                                               |
 
 **NOTE**: If an existing user submits invalid combination of Phone registered against PAN and DOB. We will return an error that _PAN is already linked with a different phone number **\*\***1234_ with last 4 digits of correct phone number.
 In such scenario if the user doesn't have the phone number then they need to login into Income Tax Department (ITD) Portal using their ID password and remove us as e-Return Intermediary using this process.
@@ -1046,7 +1044,6 @@ Here are the list of reason code and message that you might receive if there is 
 | MISSING_PURPOSE                  | Purpose is required                                                  |
 | INVALID_PURPOSE                  | Purpose should be with 1000 characters                               |
 | INVALID_PHONE_OVERRIDE           | Phone override should be boolean                                     |
-| INVALID_PDF_REQUIRED             | PDF required should be boolean                                       |
 | INVALID_ITR_DOCUMENT_REQUIRED    | ITR duration should be between 1 to 3 years                          |
 | MAX_DURATION_REACHED_ITR         | ITR should be maximum of 3 years                                     |
 | MAX_DURATION_REACHED_26AS        | 26AS should be maximum of 2 years                                    |
@@ -1090,7 +1087,6 @@ After successful response you will receive the following JSON
   "itr_duration": 1,
   "webhook_url": "https://your-website.com/webhook",
   "redirect_url": "https://your-website.com",
-  "pdf_required": false,
   "id": "<<transaction_id>>",
   "itr_response_sent": false,
   "phone": "9999999999",
