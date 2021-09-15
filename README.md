@@ -269,8 +269,9 @@ You can download or add the link to the CDN of our Web SDK. There are two functi
       function openGateway() {
          // To setup gateway UI to mach your application
          zoop.eSignGatewayInit(gatewayOptions);
-         // Pass the transaction ID created at Init call
-         zoop.eSignGateway(<<transaction_id>>);
+         // Pass the transaction ID created at Init call and the version of the
+         // esign to be used, latest is v4.
+         zoop.eSignGateway(<<transaction_id>>, "v3");
       }
     </script>
   </body>
